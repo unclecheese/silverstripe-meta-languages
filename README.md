@@ -35,3 +35,8 @@ The /usr/local/bin path is forced into the shell environment by default, but if 
 <?php
 MetaLanguages::set_coffee_exec("/my/path/to/coffee");
 ```
+
+## To-do
+Compiling SASS is exceedingly difficult from within PHP because it is a Ruby gem, so environmental issues are numerous. This module uses a thirdparty PHP compiler for SASS, which is known to have some bugs.
+
+Adding LESS support is in the works. LESS has a much better supported and more reliable PHP compiler.
