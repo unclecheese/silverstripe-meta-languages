@@ -1,0 +1,27 @@
+.bar, .baz {
+	color: blue;
+}
+
+#context .bar a {
+	color: blue;
+}
+
+.bar .baz {
+	color: blue;
+}
+
+a.bar.baz {
+	color: blue;
+}
+
+.hello.goodbye {
+	color: blue;
+}
+
+.inter {
+	color: blue;
+}
+
+.media {
+	c: d;
+}

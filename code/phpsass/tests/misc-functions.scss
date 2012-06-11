@@ -1,0 +1,5 @@
+#misc-function {
+  $bool: true;
+  
+  font-size: if($bool, 12px, 10px);
+}

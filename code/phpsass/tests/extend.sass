@@ -1,0 +1,15 @@
+.error
+	border: 1px #f00
+	background-color: #fdd
+
+.seriousError
+	@extend .error
+	border-width: 3px
+
+
+.hoverlink
+	@extend a:hover
+	@extend .seriousError
+
+.comment a:hover
+	text-decoration: underline
