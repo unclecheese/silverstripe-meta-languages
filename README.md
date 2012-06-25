@@ -1,5 +1,5 @@
 # Meta-Languages for SilverStripe
-This module allows the direct inclusion of uncompiled meta-language dependencies such as CoffeeScript and SASS into your project and compiles them at runtime.
+This module allows the direct inclusion of uncompiled meta-language dependencies such as CoffeeScript, LESS, and SASS into your project and compiles them at runtime.
 
 ## Basic Usage
 Just require the dependency in your controller, and use it just like Requirements.
@@ -38,5 +38,3 @@ MetaLanguages::set_coffee_exec("/my/path/to/coffee");
 
 ## To-do
 Compiling SASS is exceedingly difficult from within PHP because it is a Ruby gem, so environmental issues are numerous. This module uses a thirdparty PHP compiler for SASS, which is known to have some bugs.
-
-Adding LESS support is in the works. LESS has a much better supported and more reliable PHP compiler.
