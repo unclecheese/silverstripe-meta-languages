@@ -53,9 +53,12 @@ class Requirement_less extends MetaLanguage {
 
 
 	/**
-	 * Compiles the $uncompiledFile into JS
+	 * Compiles the $uncompiledFile into CSS
 	 */
 	public function compile() {
+		if(MetaLanguages::within_modification_tolerance($this->uncompiledFile, $this->getCompiledPath())) {
+			return;
+		}		
 		$path = $this->getCompiledPath();
 		if(file_exists($path) && !is_writable($this->getCompiledPath())) {
 			user_error("SCSS compiling error: $path is not writable.", E_USER_ERROR);

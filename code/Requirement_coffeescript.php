@@ -62,6 +62,9 @@ class Requirement_coffeescript extends MetaLanguage {
 	 * Compiles the $uncompiledFile into JS
 	 */
 	public function compile() {
+		if(MetaLanguages::within_modification_tolerance($this->uncompiledFile, $this->getCompiledPath())) {
+			return;
+		}
 		putenv("PATH=/usr/local/bin");
 		chdir(BASE_PATH);
 		$target_dir = dirname($this->uncompiledFile);

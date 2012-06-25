@@ -51,9 +51,12 @@ class Requirement_scss extends MetaLanguage {
 
 
 	/**
-	 * Compiles the $uncompiledFile into JS
+	 * Compiles the $uncompiledFile into CSS
 	 */
 	public function compile() {
+		if(MetaLanguages::within_modification_tolerance($this->uncompiledFile, $this->getCompiledPath())) {
+			return;
+		}		
 		$path = $this->getCompiledPath();
 		$parser = new SassParser();				
 		$sass = $parser->toCss($this->uncompiledFile);

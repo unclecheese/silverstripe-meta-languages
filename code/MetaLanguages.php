@@ -41,6 +41,18 @@ class MetaLanguages {
 
 
 
+	/**
+	 * @var int The number of seconds difference between an uncompiled
+	 * 			file and a complied file that should trigger a compile.
+	 *			This value is used to control unnecessarily compling on
+	 *			every request, and limit them to only times when raw
+	 *			file has been modified. It should represent the maximum
+	 *			amount of time that a compliling script should take to run
+	 * @see {@link MetaLanguages::within_modification_tolerance()}
+	 *
+	 */
+	public static $modification_tolerance = 5;
+
 
 
 	/**
@@ -154,6 +166,24 @@ class MetaLanguages {
 	   	'code' => $termination_code
 	   );
 		
+	}
+
+
+
+	/**
+	 * Compares the modified times of two files and determines if compiling should
+	 * happen, based on {@link self::$modification_tolerance}. This is to limit running
+	 * compiling on every request, and only run compiling scripts when changes have been
+	 * made to the uncomplied file(s).
+	 *
+	 * @param string $file1 The path to the first file
+	 * @param string $file2 The path to the second file
+	 * @return bool True if the two files are close enough in modification time
+	 *					 that they don't need to be compiled.
+	 *
+	 */
+	public static function within_modification_tolerance($file1, $file2) {
+		return abs(filemtime(BASE_PATH."/".$file1) - filemtime(BASE_PATH."/".$file2)) <= self::$modification_tolerance;
 	}
 
 
