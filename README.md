@@ -36,7 +36,8 @@ The /usr/local/bin path is forced into the shell environment by default, but if 
 Requirement_coffeescript::$coffee_exec = "/my/path/to/coffee;
 ```
 
-## Change the modification time tolerance that triggers a compile. Compiling doesn't happen unless the "last edited" time difference between the raw and uncompiled file is greater than a specific number of seconds (defaults to 5)
+## Change the modification time tolerance that triggers a compile. 
+Compiling doesn't happen unless the "last edited" time difference between the raw and uncompiled file is greater than a specific number of seconds (defaults to 5)
 ```php
 <?php
 MetaLanguages::$modification_tolerance = 10;
