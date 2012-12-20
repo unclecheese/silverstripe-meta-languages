@@ -36,10 +36,10 @@ class Requirement_coffeescript extends MetaLanguage {
 	 */
 	public function getCompiledPath() {
 		$new_file = basename($this->uncompiledFile,".coffee").".js";
-		if(!self::$compiled_path) {
+		if(!$this->config()->compiled_path) {
 			return project()."/javascript/".$new_file;
 		}
-		return self::$compiled_path."/".$new_file;
+		return $this->config()->compiled_path."/".$new_file;
 
 	}
 
@@ -70,7 +70,7 @@ class Requirement_coffeescript extends MetaLanguage {
 		$target_dir = dirname($this->uncompiledFile);
 		$target_file = $this->getCompiledPath();
 		$exec = sprintf("%s -c -o %s %s",
-					self::$coffee_exec,				
+					$this->config()->coffee_exec,				
 					dirname($target_file),
 					$target_dir
 				);

@@ -26,5 +26,14 @@ abstract class MetaLanguage implements MetaLanguageInterface {
 
 
 
+	/**
+	 * A shortcut to getting the config, since this class is not a descendant of {@link Object}
+	 *
+	 * @return Config
+	 */
+	public function config() {
+		return Config::inst()->forClass(get_class($this));
+	}
+
 
 }

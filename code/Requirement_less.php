@@ -29,10 +29,10 @@ class Requirement_less extends MetaLanguage {
 	 */
 	public function getCompiledPath() {
 		$new_file = basename($this->uncompiledFile,".less").".css";
-		if(!self::$compiled_path) {
+		if(!$this->config()->compiled_path) {
 			return SSViewer::get_theme_folder()."/css/".$new_file;
 		}
-		return self::$compiled_path."/".$new_file;
+		return $this->config()->compiled_path."/".$new_file;
 
 	}
 

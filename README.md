@@ -23,24 +23,25 @@ MetaLanguages::set_compile_environments(array(
 
 ## Specifying target directories
 By default, CoffeeScript compiles to project-dir/javascript, and SASS/LESS compiles to themes/my-theme/css, but those paths can be overridden.
-```php
-<?php
-Requirement_coffeescript::$compiled_path = "mysite/coffee";
-Requirement_scss::$compiled_path = "mysite/sass";
+```
+Requirement_coffeescript:
+  compiled_path: mysite/coffee
+Requirement_scss:
+  compiled_path: mysite/sass
 ```
 
 ## Specifying a path to the "coffee" executable
 The /usr/local/bin path is forced into the shell environment by default, but if you need more control over it:
-```php
-<?php
-Requirement_coffeescript::$coffee_exec = "/my/path/to/coffee;
+```
+Requirement_coffeescript:
+  coffee_exec: /my/path/to/coffee
 ```
 
 ## Change the modification time tolerance that triggers a compile. 
 Compiling doesn't happen unless the "last edited" time difference between the raw and uncompiled file is greater than a specific number of seconds (defaults to 5)
-```php
-<?php
-MetaLanguages::$modification_tolerance = 10;
+```
+MetaLanguages:
+  modification_tolerance: 10;
 ```
 
 ## To-do

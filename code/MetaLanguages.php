@@ -9,7 +9,6 @@
  * The compiling can be forced on or off, as well, allowing the user
  * to use his own logic for determining a "compilable" environment.
  *
- * @todo Support for LESS
  * @todo The true SASS compiler cannot be run from within PHP very easily
  * 		 because it is a Ruby gem, and raises all sorts of environment
  *		 issues when running shell_exec(). Instead, this class uses
@@ -25,7 +24,7 @@ class MetaLanguages {
 	 * @var bool If false, compiling is turned off unconditionally, without
 	 *			 regard to the environment
 	 */
-	protected static $enable_compiling = true;
+	public static $enable_compiling = true;
 
 
 
@@ -61,7 +60,7 @@ class MetaLanguages {
 	 * @return bool
 	 */
 	protected static function should_compile() {
-		if(!self::$enable_compiling) {
+		if(!Config::inst()->forClass("MetaLanguages")->enable_compiling) {
 			return false;
 		}
 		return 	(in_array(Director::get_environment_type(), self::$environments)) || 
@@ -183,7 +182,7 @@ class MetaLanguages {
 	 *
 	 */
 	public static function within_modification_tolerance($file1, $file2) {
-		return abs(filemtime(BASE_PATH."/".$file1) - filemtime(BASE_PATH."/".$file2)) <= self::$modification_tolerance;
+		return abs(filemtime(BASE_PATH."/".$file1) - filemtime(BASE_PATH."/".$file2)) <= Config::inst()->forClass("MetaLanguages")->modification_tolerance;
 	}
 
 
