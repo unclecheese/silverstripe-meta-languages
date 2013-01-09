@@ -60,11 +60,12 @@ class MetaLanguages {
 	 * @return bool
 	 */
 	protected static function should_compile() {
-		if(!Config::inst()->forClass("MetaLanguages")->enable_compiling) {
+		$config = Config::inst()->forClass("MetaLanguages");
+		if(!$config->enable_compiling) {
 			return false;
 		}
-		return 	(in_array(Director::get_environment_type(), self::$environments)) || 
-				(in_array($_SERVER['HTTP_HOST'], self::$environments));
+		return 	(in_array(Director::get_environment_type(), $config->environments)) || 
+				(in_array($_SERVER['HTTP_HOST'], $config->environments));
 	}
 
 
