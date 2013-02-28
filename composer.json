@@ -1,5 +1,5 @@
 {
-    "name": "silverstripe/meta-languages",
+    "name": "unclecheese/meta-languages",
     "description": "Allows you to add CoffeeScript, SCSS, and LESS as standard requirements and automatically compiles on page load.",
     "type": "silverstripe-module",
     "keywords": ["silverstripe", "coffeescript", "less", "sass", "scss", "meta-languages", "preprocessor"],
@@ -17,6 +17,7 @@
     },
     "extra": {
 	"installer-name": "meta_languages"
-    }
+    },
+    "replace": {"silverstripe/meta-languages": "*"}
     
 }
