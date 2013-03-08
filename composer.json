@@ -13,7 +13,9 @@
     "require":
     {
         "silverstripe/framework": "3.*",
-	    "silverstripe/cms": "3.*"
+	"silverstripe/cms": "3.*",
+	"coffeescript/coffeescript": "dev-master"
+	    
     },
     "extra": {
 	"installer-name": "meta_languages"
