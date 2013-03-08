@@ -68,11 +68,11 @@ class Requirement_coffeescript extends MetaLanguage {
 		if(MetaLanguages::within_modification_tolerance($this->uncompiledFile, $this->getCompiledPath())) {
 			return;
 		}
-		$file = $this->uncompiledFile;
+		$file = BASE_PATH.'/'.$this->uncompiledFile;
 		try {
 		  $coffee = file_get_contents($file);
 		  $js = CoffeeScript\Compiler::compile($coffee, array('filename' => $file));
-		  $js_file = fopen($this->getCompiledPath(), "w");
+		  $js_file = fopen(BASE_PATH.'/'.$this->getCompiledPath(), "w");
 		  fwrite($js_file, $js);
 		  fclose($js_file);
 		}
