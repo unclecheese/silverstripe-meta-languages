@@ -62,24 +62,22 @@ class Requirement_coffeescript extends MetaLanguage {
 	 * Compiles the $uncompiledFile into JS
 	 */
 	public function compile() {
+		if(!class_exists("CoffeeScript\\Compiler")) {
+			user_error("CoffeeScript requires the PHP CoffeeScript compiler to run. You can install with \"composer require coffeescript/coffeescript\"",E_USER_ERROR);
+		}
 		if(MetaLanguages::within_modification_tolerance($this->uncompiledFile, $this->getCompiledPath())) {
 			return;
 		}
-		putenv("PATH=/usr/local/bin");
-		chdir(BASE_PATH);
-		$target_dir = dirname($this->uncompiledFile);
-		$target_file = $this->getCompiledPath();
-		$exec = sprintf("%s -c -o %s %s",
-					$this->config()->coffee_exec,				
-					dirname($target_file),
-					$target_dir
-				);
-		$output = MetaLanguages::run_command($exec);
-		if(!empty($output['output'])) {
-			user_error("Error compiling CoffeeScript: " . $output['output'], E_USER_ERROR);
-		}	
-		if(!file_exists($target_file)) {
-			user_error("Could not compile CoffeeScript. Ran command '$exec', Code: " .$output['code'] . " Output: ".$output['output'], E_USER_ERROR);
+		$file = $this->uncompiledFile;
+		try {
+		  $coffee = file_get_contents($file);
+		  $js = CoffeeScript\Compiler::compile($coffee, array('filename' => $file));
+		  $js_file = fopen($this->getCompiledPath(), "w");
+		  fwrite($js_file, $js);
+		  fclose($js_file);
+		}
+		catch (Exception $e) {
+		  user_error($e->getMessage(), E_USER_ERROR);
 		}		
 	}
 
