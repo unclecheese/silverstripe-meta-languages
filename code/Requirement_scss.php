@@ -63,7 +63,7 @@ class Requirement_scss extends MetaLanguage {
 		if(file_exists($path) && !is_writable($this->getCompiledPath())) {
 			user_error("SCSS compiling error: $path is not writable.", E_USER_ERROR);
 		}
-		elseif(!is_writable(dirname($path))) {
+		elseif(!is_writable(BASE_PATH."/".$path)) {
 			user_error("SCSS compiling error: $path is not writable.", E_USER_ERROR);	
 		}
 		$file = fopen($path,"w");
