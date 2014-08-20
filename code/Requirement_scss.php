@@ -59,7 +59,7 @@ class Requirement_scss extends MetaLanguage {
 		}		
 		$path = $this->getCompiledPath();
 		$parser = new SassParser();				
-		$sass = $parser->toCss($this->uncompiledFile);
+		$sass = $parser->toCss(BASE_PATH."/".$this->uncompiledFile);
 		if(file_exists($path) && !is_writable($this->getCompiledPath())) {
 			user_error("SCSS compiling error: $path is not writable.", E_USER_ERROR);
 		}
