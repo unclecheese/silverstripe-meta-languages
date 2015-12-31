@@ -16,8 +16,9 @@ require_once('SassLiteral.php');
  * @package      PHamlP
  * @subpackage  Sass.script.literals
  */
-class SassBoolean extends SassLiteral {
-  /**@#+
+class SassBoolean extends SassLiteral
+{
+    /**@#+
    * Regex for matching and extracting booleans
    */
   const MATCH = '/^(true|false)\b/';
@@ -27,32 +28,33 @@ class SassBoolean extends SassLiteral {
    * @param string value of the boolean type
    * @return SassBoolean
    */
-  public function __construct($value) {
-    if (is_bool($value)) {
-      $this->value = $value;
-    }
-    elseif ($value === 'true' || $value === 'false') {
-      $this->value = ($value === 'true' ? true : false);
-    }
-    else {
-      throw new SassBooleanException('Invalid SassBoolean', SassScriptParser::$context->node);
-    }
+  public function __construct($value)
+  {
+      if (is_bool($value)) {
+          $this->value = $value;
+      } elseif ($value === 'true' || $value === 'false') {
+          $this->value = ($value === 'true' ? true : false);
+      } else {
+          throw new SassBooleanException('Invalid SassBoolean', SassScriptParser::$context->node);
+      }
   }
 
   /**
    * Returns the value of this boolean.
    * @return boolean the value of this boolean
    */
-  public function getValue() {
-    return $this->value;
+  public function getValue()
+  {
+      return $this->value;
   }
 
   /**
    * Returns a string representation of the value.
    * @return string string representation of the value.
    */
-  public function toString() {
-    return $this->getValue() ? 'true' : 'false';
+  public function toString()
+  {
+      return $this->getValue() ? 'true' : 'false';
   }
 
   /**
@@ -61,7 +63,8 @@ class SassBoolean extends SassLiteral {
    * @param string the subject string
    * @return mixed match at the start of the string or false if no match
    */
-  public static function isa($subject) {
-    return (preg_match(self::MATCH, $subject, $matches) ? $matches[0] : false);
+  public static function isa($subject)
+  {
+      return (preg_match(self::MATCH, $subject, $matches) ? $matches[0] : false);
   }
 }

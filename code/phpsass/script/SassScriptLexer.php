@@ -26,13 +26,14 @@ require_once('SassScriptVariable.php');
  * @package      PHamlP
  * @subpackage  Sass.script
  */
-class SassScriptLexer {
-  const MATCH_WHITESPACE = '/^\s+/';
+class SassScriptLexer
+{
+    const MATCH_WHITESPACE = '/^\s+/';
 
   /**
    * Static holder for last instance of SassScriptLexer
    */
-  static public $instance;
+  public static $instance;
 
   /**
    * @var SassScriptParser the parser object
@@ -43,9 +44,10 @@ class SassScriptLexer {
   * SassScriptLexer constructor.
   * @return SassScriptLexer
   */
-  public function __construct($parser) {
-    $this->parser = $parser;
-    self::$instance = $this;
+  public function __construct($parser)
+  {
+      $this->parser = $parser;
+      self::$instance = $this;
   }
 
   /**
@@ -54,67 +56,60 @@ class SassScriptLexer {
    * @param SassContext the context in which the expression is lexed
    * @return array tokens
    */
-  public function lex($string, $context) {
-    // if it's already lexed, just return it as-is
+  public function lex($string, $context)
+  {
+      // if it's already lexed, just return it as-is
     if (is_object($string)) {
-      return array($string);
+        return array($string);
     }
-    if (is_array($string)) {
-      return $string;
-    }
+      if (is_array($string)) {
+          return $string;
+      }
     // whilst the string is not empty, split it into it's tokens.
     while ($string !== false) {
-      if (($match = $this->isWhitespace($string)) !== false) {
-        $tokens[] = null;
-      }
-      elseif (($match = SassScriptFunction::isa($string)) !== false) {
-        preg_match(SassScriptFunction::MATCH_FUNC, $match, $matches);
-        $args = array();
-        foreach (SassScriptFunction::extractArgs($matches[SassScriptFunction::ARGS], false) as $key => $expression) {
-          $args[$key] = $this->parser->evaluate($expression, $context);
-        }
-        $tokens[] = new SassScriptFunction($matches[SassScriptFunction::NAME], $args);
-      }
-      elseif (($match = SassBoolean::isa($string)) !== false) {
-        $tokens[] = new SassBoolean($match);
-      }
-      elseif (($match = SassColour::isa($string)) !== false) {
-        $tokens[] = new SassColour($match);
-      }
-      elseif (($match = SassNumber::isa($string)) !== false) {
-        $tokens[] = new SassNumber($match);
-      }
-      elseif (($match = SassString::isa($string)) !== false) {
-        $stringed = new SassString($match);
-        if (strlen($stringed->quote) == 0 && SassList::isa($string) !== false) {
-          $tokens[] = new SassList($string);
-        } else {
-          $tokens[] = $stringed;
-        }
-      }
-      elseif (($match = SassScriptOperation::isa($string)) !== false) {
-        $tokens[] = new SassScriptOperation($match);
-      }
-      elseif (($match = SassScriptVariable::isa($string)) !== false) {
-        $tokens[] = new SassScriptVariable($match);
-      }
-      else {
-        $_string = $string;
-        $match = '';
-        while (strlen($_string) && !$this->isWhitespace($_string)) {
-          foreach (SassScriptOperation::$inStrOperators as $operator) {
-            if (substr($_string, 0, strlen($operator)) == $operator) {
-              break 2;
+        if (($match = $this->isWhitespace($string)) !== false) {
+            $tokens[] = null;
+        } elseif (($match = SassScriptFunction::isa($string)) !== false) {
+            preg_match(SassScriptFunction::MATCH_FUNC, $match, $matches);
+            $args = array();
+            foreach (SassScriptFunction::extractArgs($matches[SassScriptFunction::ARGS], false) as $key => $expression) {
+                $args[$key] = $this->parser->evaluate($expression, $context);
             }
-          }
-          $match .= $_string[0];
-          $_string = substr($_string, 1);
+            $tokens[] = new SassScriptFunction($matches[SassScriptFunction::NAME], $args);
+        } elseif (($match = SassBoolean::isa($string)) !== false) {
+            $tokens[] = new SassBoolean($match);
+        } elseif (($match = SassColour::isa($string)) !== false) {
+            $tokens[] = new SassColour($match);
+        } elseif (($match = SassNumber::isa($string)) !== false) {
+            $tokens[] = new SassNumber($match);
+        } elseif (($match = SassString::isa($string)) !== false) {
+            $stringed = new SassString($match);
+            if (strlen($stringed->quote) == 0 && SassList::isa($string) !== false) {
+                $tokens[] = new SassList($string);
+            } else {
+                $tokens[] = $stringed;
+            }
+        } elseif (($match = SassScriptOperation::isa($string)) !== false) {
+            $tokens[] = new SassScriptOperation($match);
+        } elseif (($match = SassScriptVariable::isa($string)) !== false) {
+            $tokens[] = new SassScriptVariable($match);
+        } else {
+            $_string = $string;
+            $match = '';
+            while (strlen($_string) && !$this->isWhitespace($_string)) {
+                foreach (SassScriptOperation::$inStrOperators as $operator) {
+                    if (substr($_string, 0, strlen($operator)) == $operator) {
+                        break 2;
+                    }
+                }
+                $match .= $_string[0];
+                $_string = substr($_string, 1);
+            }
+            $tokens[] = new SassString($match);
         }
-        $tokens[] = new SassString($match);
-      }
-      $string = substr($string, strlen($match));
+        $string = substr($string, strlen($match));
     }
-    return $tokens;
+      return $tokens;
   }
 
   /**
@@ -123,7 +118,8 @@ class SassScriptLexer {
    * @param string the subject string
    * @return mixed match at the start of the string or false if no match
    */
-  public function isWhitespace($subject) {
-    return (preg_match(self::MATCH_WHITESPACE, $subject, $matches) ? $matches[0] : false);
+  public function isWhitespace($subject)
+  {
+      return (preg_match(self::MATCH_WHITESPACE, $subject, $matches) ? $matches[0] : false);
   }
 }

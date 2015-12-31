@@ -19,11 +19,12 @@ require_once('SassLiteralExceptions.php');
  * @package      PHamlP
  * @subpackage  Sass.script.literals
  */
-abstract class SassLiteral {
-  /**
+abstract class SassLiteral
+{
+    /**
    * @var array maps class names to data types
    */
-  static public $typeOf = array(
+  public static $typeOf = array(
     'SassBoolean' => 'bool',
     'SassColour'  => 'color',
     'SassNumber'  => 'number',
@@ -41,9 +42,10 @@ abstract class SassLiteral {
    * @param string value of the literal type
    * @return SassLiteral
    */
-  public function __construct($value = null, $context) {
-    $this->value = $value;
-    $this->context = $context;
+  public function __construct($value = null, $context)
+  {
+      $this->value = $value;
+      $this->context = $context;
   }
 
   /**
@@ -51,54 +53,60 @@ abstract class SassLiteral {
    * @param string name of property to get
    * @return mixed return value of getter function
    */
-  public function __get($name) {
-    $getter = 'get' . ucfirst($name);
-    if (method_exists($this, $getter)) {
-      return $this->$getter();
-    }
-    else {
-      throw new SassLiteralException('No getter function for ' . $name, SassScriptParser::$context->node);
-    }
+  public function __get($name)
+  {
+      $getter = 'get' . ucfirst($name);
+      if (method_exists($this, $getter)) {
+          return $this->$getter();
+      } else {
+          throw new SassLiteralException('No getter function for ' . $name, SassScriptParser::$context->node);
+      }
   }
 
-  public function __toString() {
-    return $this->toString();
-  }
+    public function __toString()
+    {
+        return $this->toString();
+    }
 
   /**
    * Returns the boolean representation of the value of this
    * @return boolean the boolean representation of the value of this
    */
-  public function toBoolean() {
-    return (boolean)$this->value || $this->value === null;
+  public function toBoolean()
+  {
+      return (boolean)$this->value || $this->value === null;
   }
 
   /**
    * Returns the type of this
    * @return string the type of this
    */
-  public function getTypeOf() {
-    return self::$typeOf[get_class($this)];
+  public function getTypeOf()
+  {
+      return self::$typeOf[get_class($this)];
   }
 
   /**
    * Returns the value of this
    * @return mixed the value of this
    */
-  public function getValue() {
-    throw new SassLiteralException('Child classes must override this method', SassScriptParser::$context->node);
+  public function getValue()
+  {
+      throw new SassLiteralException('Child classes must override this method', SassScriptParser::$context->node);
   }
 
-  public function getChildren() {
-    return array();
-  }
+    public function getChildren()
+    {
+        return array();
+    }
 
   /**
    * Adds a child object to this.
    * @param sassLiteral the child object
    */
-  public function addChild($sassLiteral) {
-    $this->children[] = $sassLiteral;
+  public function addChild($sassLiteral)
+  {
+      $this->children[] = $sassLiteral;
   }
 
   /**
@@ -106,8 +114,9 @@ abstract class SassLiteral {
    * @param sassLiteral value to add
    * @return sassString the string values of this and other with no seperation
    */
-  public function op_plus($other) {
-    return new SassString($this->toString().$other->toString());
+  public function op_plus($other)
+  {
+      return new SassString($this->toString().$other->toString());
   }
 
   /**
@@ -115,8 +124,9 @@ abstract class SassLiteral {
    * @param SassLiteral value to subtract
    * @return sassString the string values of this and other seperated by '-'
    */
-  public function op_minus($other) {
-    return new SassString($this->toString().'-'.$other->toString());
+  public function op_minus($other)
+  {
+      return new SassString($this->toString().'-'.$other->toString());
   }
 
   /**
@@ -124,8 +134,9 @@ abstract class SassLiteral {
    * @param SassLiteral value to multiply by
    * @return sassString the string values of this and other seperated by '*'
    */
-  public function op_times($other) {
-    return new SassString($this->toString().'*'.$other->toString());
+  public function op_times($other)
+  {
+      return new SassString($this->toString().'*'.$other->toString());
   }
 
   /**
@@ -133,8 +144,9 @@ abstract class SassLiteral {
    * @param SassLiteral value to divide by
    * @return sassString the string values of this and other seperated by '/'
    */
-  public function op_div($other) {
-    return new SassString($this->toString().' / '.$other->toString());
+  public function op_div($other)
+  {
+      return new SassString($this->toString().' / '.$other->toString());
   }
 
   /**
@@ -143,8 +155,9 @@ abstract class SassLiteral {
    * @return SassLiteral result
    * @throws Exception if modulo not supported for the data type
    */
-  public function op_modulo($other) {
-    throw new SassLiteralException(get_class($this) . ' does not support Modulus', SassScriptParser::$context->node);
+  public function op_modulo($other)
+  {
+      throw new SassLiteralException(get_class($this) . ' does not support Modulus', SassScriptParser::$context->node);
   }
 
   /**
@@ -153,8 +166,9 @@ abstract class SassLiteral {
    * @return string result
    * @throws Exception if bitwise AND not supported for the data type
    */
-  public function op_bw_and($other) {
-    throw new SassLiteralException(get_class($this) . ' does not support Bitwise AND', SassScriptParser::$context->node);
+  public function op_bw_and($other)
+  {
+      throw new SassLiteralException(get_class($this) . ' does not support Bitwise AND', SassScriptParser::$context->node);
   }
 
   /**
@@ -163,8 +177,9 @@ abstract class SassLiteral {
    * @return string result
    * @throws Exception if bitwise OR not supported for the data type
    */
-  public function op_bw_or($other) {
-    throw new SassLiteralException(get_class($this) . ' does not support Bitwise OR', SassScriptParser::$context->node);
+  public function op_bw_or($other)
+  {
+      throw new SassLiteralException(get_class($this) . ' does not support Bitwise OR', SassScriptParser::$context->node);
   }
 
   /**
@@ -173,8 +188,9 @@ abstract class SassLiteral {
    * @return string result
    * @throws Exception if bitwise XOR not supported for the data type
    */
-  public function op_bw_xor($other) {
-    throw new SassLiteralException(get_class($this) . ' does not support Bitwise XOR', SassScriptParser::$context->node);
+  public function op_bw_xor($other)
+  {
+      throw new SassLiteralException(get_class($this) . ' does not support Bitwise XOR', SassScriptParser::$context->node);
   }
 
   /**
@@ -183,8 +199,9 @@ abstract class SassLiteral {
    * @return string result
    * @throws Exception if bitwise NOT not supported for the data type
    */
-  public function op_bw_not() {
-    throw new SassLiteralException(get_class($this) . ' does not support Bitwise NOT', SassScriptParser::$context->node);
+  public function op_bw_not()
+  {
+      throw new SassLiteralException(get_class($this) . ' does not support Bitwise NOT', SassScriptParser::$context->node);
   }
 
   /**
@@ -193,8 +210,9 @@ abstract class SassLiteral {
    * @return string result
    * @throws Exception if bitwise Shift Left not supported for the data type
    */
-  public function op_shiftl($other) {
-    throw new SassLiteralException(get_class($this) . ' does not support Bitwise Shift Left', SassScriptParser::$context->node);
+  public function op_shiftl($other)
+  {
+      throw new SassLiteralException(get_class($this) . ' does not support Bitwise Shift Left', SassScriptParser::$context->node);
   }
 
   /**
@@ -203,8 +221,9 @@ abstract class SassLiteral {
    * @return string result
    * @throws Exception if bitwise Shift Right not supported for the data type
    */
-  public function op_shiftr($other) {
-    throw new SassLiteralException(get_class($this) . ' does not support Bitwise Shift Right', SassScriptParser::$context->node);
+  public function op_shiftr($other)
+  {
+      throw new SassLiteralException(get_class($this) . ' does not support Bitwise Shift Right', SassScriptParser::$context->node);
   }
 
   /**
@@ -212,8 +231,9 @@ abstract class SassLiteral {
    * @param sassLiteral the value to and with this
    * @return SassLiteral other if this is boolean true, this if false
    */
-  public function op_and($other) {
-    return ($this->toBoolean() ? $other : $this);
+  public function op_and($other)
+  {
+      return ($this->toBoolean() ? $other : $this);
   }
 
   /**
@@ -221,11 +241,13 @@ abstract class SassLiteral {
    * @param sassLiteral the value to or with this
    * @return SassLiteral this if this is boolean true, other if false
    */
-  public function op_or($other) {
-    return ($this->toBoolean() ? $this : $other);
+  public function op_or($other)
+  {
+      return ($this->toBoolean() ? $this : $other);
   }
 
-    public function op_assign($other) {
+    public function op_assign($other)
+    {
         return $other;
     }
 
@@ -235,8 +257,9 @@ abstract class SassLiteral {
    * @return SassBoolean SassBoolean object with the value true if this or
    * other, but not both, are true, false if not
    */
-  public function op_xor($other) {
-    return new SassBoolean($this->toBoolean() xor $other->toBoolean());
+  public function op_xor($other)
+  {
+      return new SassBoolean($this->toBoolean() xor $other->toBoolean());
   }
 
   /**
@@ -244,8 +267,9 @@ abstract class SassLiteral {
    * @return SassBoolean SassBoolean object with the value true if the
    * boolean of this is false or false if it is true
    */
-  public function op_not() {
-    return new SassBoolean(!$this->toBoolean());
+  public function op_not()
+  {
+      return new SassBoolean(!$this->toBoolean());
   }
 
   /**
@@ -254,8 +278,9 @@ abstract class SassLiteral {
    * @return SassBoolean SassBoolean object with the value true if the values
    * of this is greater than the value of other, false if it is not
    */
-  public function op_gt($other) {
-    return new SassBoolean($this->value > $other->value);
+  public function op_gt($other)
+  {
+      return new SassBoolean($this->value > $other->value);
   }
 
   /**
@@ -264,8 +289,9 @@ abstract class SassLiteral {
    * @return SassBoolean SassBoolean object with the value true if the values
    * of this is greater than or equal to the value of other, false if it is not
    */
-  public function op_gte($other) {
-    return new SassBoolean($this->value >= $other->value);
+  public function op_gte($other)
+  {
+      return new SassBoolean($this->value >= $other->value);
   }
 
   /**
@@ -274,8 +300,9 @@ abstract class SassLiteral {
    * @return SassBoolean SassBoolean object with the value true if the values
    * of this is less than the value of other, false if it is not
    */
-  public function op_lt($other) {
-    return new SassBoolean($this->value < $other->value);
+  public function op_lt($other)
+  {
+      return new SassBoolean($this->value < $other->value);
   }
 
   /**
@@ -284,8 +311,9 @@ abstract class SassLiteral {
    * @return SassBoolean SassBoolean object with the value true if the values
    * of this is less than or equal to the value of other, false if it is not
    */
-  public function op_lte($other) {
-    return new SassBoolean($this->value <= $other->value);
+  public function op_lte($other)
+  {
+      return new SassBoolean($this->value <= $other->value);
   }
 
   /**
@@ -294,8 +322,9 @@ abstract class SassLiteral {
    * @return SassBoolean SassBoolean object with the value true if this and
    * other are equal, false if they are not
    */
-  public function op_eq($other) {
-    return new SassBoolean($this == $other);
+  public function op_eq($other)
+  {
+      return new SassBoolean($this == $other);
   }
 
   /**
@@ -304,8 +333,9 @@ abstract class SassLiteral {
    * @return SassBoolean SassBoolean object with the value true if this and
    * other are not equal, false if they are
    */
-  public function op_neq($other) {
-    return new SassBoolean(!$this->op_eq($other)->toBoolean());
+  public function op_neq($other)
+  {
+      return new SassBoolean(!$this->op_eq($other)->toBoolean());
   }
 
   /**
@@ -313,8 +343,9 @@ abstract class SassLiteral {
    * @param sassLiteral the value to concatenate with a space to this
    * @return sassString the string values of this and other seperated by " "
    */
-  public function op_concat($other) {
-    return new SassString($this->toString().' '.$other->toString());
+  public function op_concat($other)
+  {
+      return new SassString($this->toString().' '.$other->toString());
   }
 
   /**
@@ -322,8 +353,9 @@ abstract class SassLiteral {
    * @param sassLiteral the value to concatenate with a comma to this
    * @return sassString the string values of this and other seperated by ","
    */
-  public function op_comma($other) {
-    return new SassString($this->toString().', '.$other->toString());
+  public function op_comma($other)
+  {
+      return new SassString($this->toString().', '.$other->toString());
   }
 
   /**
@@ -332,10 +364,11 @@ abstract class SassLiteral {
    * @param string expected type
    * @throws SassScriptFunctionException if value is not the expected type
    */
-  public static function assertType($literal, $type) {
-    if (!$literal instanceof $type) {
-      throw new SassScriptFunctionException(($literal instanceof SassLiteral ? get_class($literal) : 'literal') . ' must be a ' . $type, SassScriptParser::$context->node);
-    }
+  public static function assertType($literal, $type)
+  {
+      if (!$literal instanceof $type) {
+          throw new SassScriptFunctionException(($literal instanceof SassLiteral ? get_class($literal) : 'literal') . ' must be a ' . $type, SassScriptParser::$context->node);
+      }
   }
 
   /**
@@ -346,11 +379,12 @@ abstract class SassLiteral {
    * @param string the units.
    * @throws SassScriptFunctionException if value is not the expected type
    */
-   public static function assertInRange($literal, $min, $max, $units = '') {
-      if ($literal->value < $min || $literal->value > $max) {
-      throw new SassScriptFunctionException($literal->typeOf . ' must be between ' . $min.$units . ' and ' . $max.$units . ' inclusive', SassScriptParser::$context->node);
-    }
-  }
+   public static function assertInRange($literal, $min, $max, $units = '')
+   {
+       if ($literal->value < $min || $literal->value > $max) {
+           throw new SassScriptFunctionException($literal->typeOf . ' must be between ' . $min.$units . ' and ' . $max.$units . ' inclusive', SassScriptParser::$context->node);
+       }
+   }
 
   /**
    * Returns a string representation of the value.
@@ -358,9 +392,10 @@ abstract class SassLiteral {
    */
   abstract public function toString();
 
-  public function render() {
-    return $this->toString();
-  }
+    public function render()
+    {
+        return $this->toString();
+    }
 
   /**
    * Returns a value indicating if a token of this type can be matched at
@@ -368,7 +403,8 @@ abstract class SassLiteral {
    * @param string the subject string
    * @return mixed match at the start of the string or false if no match
    */
-  public static function isa($subject){
-    throw new SassLiteralException('Child classes must override this method');
+  public static function isa($subject)
+  {
+      throw new SassLiteralException('Child classes must override this method');
   }
 }

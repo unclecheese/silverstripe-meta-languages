@@ -36,18 +36,20 @@
  * @package      PHamlP
  * @subpackage  Sass.script
  */
-class SassScriptFunctions {
-  const DECREASE = false;
-  const INCREASE = true;
+class SassScriptFunctions
+{
+    const DECREASE = false;
+    const INCREASE = true;
 
-  public static $parser = FALSE;
-  public static function option($name) {
-    $options = SassParser::$instance->getOptions();
-    if (isset($options[$name->value])) {
-      return new SassString($options[$name->value]);
+    public static $parser = false;
+    public static function option($name)
+    {
+        $options = SassParser::$instance->getOptions();
+        if (isset($options[$name->value])) {
+            return new SassString($options[$name->value]);
+        }
+        return new SassBoolean(false);
     }
-    return new SassBoolean(false);
-  }
 
   /*
    * Colour Creation
@@ -64,8 +66,9 @@ class SassScriptFunctions {
    * @return new SassColour SassColour object
    * @throws SassScriptFunctionException if red, green, or blue are out of bounds
    */
-  public static function rgb($red, $green, $blue) {
-    return self::rgba($red, $green, $blue, new SassNumber(1));
+  public static function rgb($red, $green, $blue)
+  {
+      return self::rgba($red, $green, $blue, new SassNumber(1));
   }
 
   /**
@@ -90,8 +93,9 @@ class SassScriptFunctions {
    * colour components are out of bounds, or or the colour is not a colour, or
    * alpha is out of bounds
    */
-  public static function rgba() {
-    switch (func_num_args()) {
+  public static function rgba()
+  {
+      switch (func_num_args()) {
       case 2:
         $colour = func_get_arg(0);
         $alpha = func_get_arg(1);
@@ -104,16 +108,15 @@ class SassScriptFunctions {
         $rgba = array();
         $components = func_get_args();
         $alpha = array_pop($components);
-        foreach($components as $component) {
-          SassLiteral::assertType($component, 'SassNumber');
-          if ($component->units == '%') {
-            SassLiteral::assertInRange($component, 0, 100, '%');
-            $rgba[] = $component->value * 2.55;
-          }
-          else {
-            SassLiteral::assertInRange($component, 0, 255);
-            $rgba[] = $component->value;
-          }
+        foreach ($components as $component) {
+            SassLiteral::assertType($component, 'SassNumber');
+            if ($component->units == '%') {
+                SassLiteral::assertInRange($component, 0, 100, '%');
+                $rgba[] = $component->value * 2.55;
+            } else {
+                SassLiteral::assertInRange($component, 0, 255);
+                $rgba[] = $component->value;
+            }
         }
         SassLiteral::assertType($alpha, 'SassNumber');
         SassLiteral::assertInRange($alpha, 0, 1);
@@ -138,10 +141,11 @@ class SassScriptFunctions {
    * @return new SassColour The resulting colour
    * @throws SassScriptFunctionException if saturation or lightness are out of bounds
    */
-  public static function hsl($h, $s, $l) {
-    SassLiteral::assertInRange($s, 0, 100, '%');
-    SassLiteral::assertInRange($l, 0, 100, '%');
-    return self::hsla($h, $s, $l, new SassNumber(1));
+  public static function hsl($h, $s, $l)
+  {
+      SassLiteral::assertInRange($s, 0, 100, '%');
+      SassLiteral::assertInRange($l, 0, 100, '%');
+      return self::hsla($h, $s, $l, new SassNumber(1));
   }
 
   /**
@@ -158,15 +162,16 @@ class SassScriptFunctions {
    * @throws SassScriptFunctionException if saturation, lightness or alpha are
    * out of bounds
    */
-  public static function hsla($h, $s, $l, $a) {
-    SassLiteral::assertType($h, 'SassNumber');
-    SassLiteral::assertType($s, 'SassNumber');
-    SassLiteral::assertType($l, 'SassNumber');
-    SassLiteral::assertType($a, 'SassNumber');
-    SassLiteral::assertInRange($s, 0, 100, '%');
-    SassLiteral::assertInRange($l, 0, 100, '%');
-    SassLiteral::assertInRange($a, 0,   1);
-    return new SassColour(array('hue' => $h, 'saturation' => $s, 'lightness' => $l, 'alpha' => $a));
+  public static function hsla($h, $s, $l, $a)
+  {
+      SassLiteral::assertType($h, 'SassNumber');
+      SassLiteral::assertType($s, 'SassNumber');
+      SassLiteral::assertType($l, 'SassNumber');
+      SassLiteral::assertType($a, 'SassNumber');
+      SassLiteral::assertInRange($s, 0, 100, '%');
+      SassLiteral::assertInRange($l, 0, 100, '%');
+      SassLiteral::assertInRange($a, 0,   1);
+      return new SassColour(array('hue' => $h, 'saturation' => $s, 'lightness' => $l, 'alpha' => $a));
   }
 
   /*
@@ -179,9 +184,10 @@ class SassScriptFunctions {
    * @return new SassNumber The red component of colour
    * @throws SassScriptFunctionException If $colour is not a colour
    */
-  public static function red($colour) {
-    SassLiteral::assertType($colour, 'SassColour');
-    return new SassNumber($colour->red);
+  public static function red($colour)
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      return new SassNumber($colour->red);
   }
 
   /**
@@ -190,9 +196,10 @@ class SassScriptFunctions {
    * @return new SassNumber The green component of colour
    * @throws SassScriptFunctionException If $colour is not a colour
    */
-  public static function green($colour) {
-    SassLiteral::assertType($colour, 'SassColour');
-    return new SassNumber($colour->green);
+  public static function green($colour)
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      return new SassNumber($colour->green);
   }
 
   /**
@@ -201,9 +208,10 @@ class SassScriptFunctions {
    * @return new SassNumber The blue component of colour
    * @throws SassScriptFunctionException If $colour is not a colour
    */
-  public static function blue($colour) {
-    SassLiteral::assertType($colour, 'SassColour');
-    return new SassNumber($colour->blue);
+  public static function blue($colour)
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      return new SassNumber($colour->blue);
   }
 
   /**
@@ -212,9 +220,10 @@ class SassScriptFunctions {
    * @return new SassNumber The hue component of colour
    * @throws SassScriptFunctionException If $colour is not a colour
    */
-  public static function hue($colour) {
-    SassLiteral::assertType($colour, 'SassColour');
-    return new SassNumber($colour->getHue() . 'deg');
+  public static function hue($colour)
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      return new SassNumber($colour->getHue() . 'deg');
   }
 
   /**
@@ -223,9 +232,10 @@ class SassScriptFunctions {
    * @return new SassNumber The saturation component of colour
    * @throws SassScriptFunctionException If $colour is not a colour
    */
-  public static function saturation($colour) {
-    SassLiteral::assertType($colour, 'SassColour');
-    return new SassNumber($colour->getSaturation() . '%');
+  public static function saturation($colour)
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      return new SassNumber($colour->getSaturation() . '%');
   }
 
   /**
@@ -234,9 +244,10 @@ class SassScriptFunctions {
    * @return new SassNumber The lightness component of colour
    * @throws SassScriptFunctionException If $colour is not a colour
    */
-  public static function lightness($colour) {
-    SassLiteral::assertType($colour, 'SassColour');
-    return new SassNumber($colour->getLightness() . '%');
+  public static function lightness($colour)
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      return new SassNumber($colour->getLightness() . '%');
   }
 
   /**
@@ -247,14 +258,14 @@ class SassScriptFunctions {
    *
    * RL modified so that the filter: alpha function doesn't bork
    */
-  public static function alpha($colour) {
-    try {
-      SassLiteral::assertType($colour, 'SassColour');
-    }
-    catch (Exception $e) {
-      return new SassString('alpha(100)');
-    }
-    return new SassNumber($colour->alpha);
+  public static function alpha($colour)
+  {
+      try {
+          SassLiteral::assertType($colour, 'SassColour');
+      } catch (Exception $e) {
+          return new SassString('alpha(100)');
+      }
+      return new SassNumber($colour->alpha);
   }
 
   /**
@@ -263,9 +274,10 @@ class SassScriptFunctions {
    * @return new SassNumber The alpha component (opacity) of colour
    * @throws SassScriptFunctionException If $colour is not a colour
    */
-  public static function opacity($colour) {
-    SassLiteral::assertType($colour, 'SassColour');
-    return new SassNumber($colour->alpha);
+  public static function opacity($colour)
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      return new SassNumber($colour->alpha);
   }
 
   /*
@@ -280,10 +292,11 @@ class SassScriptFunctions {
    * @throws SassScriptFunctionException If $colour is not a colour or
    * $degrees is not a number
    */
-  public static function adjust_hue($colour, $degrees) {
-    SassLiteral::assertType($colour, 'SassColour');
-    SassLiteral::assertType($degrees, 'SassNumber');
-    return $colour->with(array('hue' => $colour->getHue(true) + $degrees->value));
+  public static function adjust_hue($colour, $degrees)
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      SassLiteral::assertType($degrees, 'SassNumber');
+      return $colour->with(array('hue' => $colour->getHue(true) + $degrees->value));
   }
 
   /**
@@ -302,8 +315,9 @@ class SassScriptFunctions {
    * $amount is not a number
    * @see lighten_rel
    */
-  public static function lighten($colour, $amount, $ofCurrent = false) {
-    return self::adjust($colour, $amount, $ofCurrent, 'lightness', self::INCREASE, 0, 100, '%');
+  public static function lighten($colour, $amount, $ofCurrent = false)
+  {
+      return self::adjust($colour, $amount, $ofCurrent, 'lightness', self::INCREASE, 0, 100, '%');
   }
 
   /**
@@ -322,8 +336,9 @@ class SassScriptFunctions {
    * $amount is not a number
    * @see adjust
    */
-  public static function darken($colour, $amount, $ofCurrent = false) {
-    return self::adjust($colour, $amount, $ofCurrent, 'lightness', self::DECREASE, 0, 100, '%');
+  public static function darken($colour, $amount, $ofCurrent = false)
+  {
+      return self::adjust($colour, $amount, $ofCurrent, 'lightness', self::DECREASE, 0, 100, '%');
   }
 
   /**
@@ -342,8 +357,9 @@ class SassScriptFunctions {
    * $amount is not a number
    * @see adjust
    */
-  public static function saturate($colour, $amount, $ofCurrent = false) {
-    return self::adjust($colour, $amount, $ofCurrent, 'saturation', self::INCREASE, 0, 100, '%');
+  public static function saturate($colour, $amount, $ofCurrent = false)
+  {
+      return self::adjust($colour, $amount, $ofCurrent, 'saturation', self::INCREASE, 0, 100, '%');
   }
 
   /**
@@ -362,8 +378,9 @@ class SassScriptFunctions {
    * $amount is not a number
    * @see adjust
    */
-  public static function desaturate($colour, $amount, $ofCurrent = false) {
-    return self::adjust($colour, $amount, $ofCurrent, 'saturation', self::DECREASE, 0, 100, '%');
+  public static function desaturate($colour, $amount, $ofCurrent = false)
+  {
+      return self::adjust($colour, $amount, $ofCurrent, 'saturation', self::DECREASE, 0, 100, '%');
   }
 
   /**
@@ -380,9 +397,10 @@ class SassScriptFunctions {
    * $amount is not a number
    * @see opacify_rel
    */
-  public static function opacify($colour, $amount, $ofCurrent = false) {
-    $units = self::units($amount);
-    return self::adjust($colour, $amount, $ofCurrent, 'alpha', self::INCREASE, 0, ($units === '%' ? 100 : 1), $units);
+  public static function opacify($colour, $amount, $ofCurrent = false)
+  {
+      $units = self::units($amount);
+      return self::adjust($colour, $amount, $ofCurrent, 'alpha', self::INCREASE, 0, ($units === '%' ? 100 : 1), $units);
   }
 
   /**
@@ -398,9 +416,10 @@ class SassScriptFunctions {
    * @throws SassScriptFunctionException If $colour is not a colour or
    * $amount is not a number
    */
-  public static function transparentize($colour, $amount, $ofCurrent = false) {
-    $units = self::units($amount);
-    return self::adjust($colour, $amount, $ofCurrent, 'alpha', self::DECREASE, 0, ($units === '%' ? 100 : 1), $units);
+  public static function transparentize($colour, $amount, $ofCurrent = false)
+  {
+      $units = self::units($amount);
+      return self::adjust($colour, $amount, $ofCurrent, 'alpha', self::DECREASE, 0, ($units === '%' ? 100 : 1), $units);
   }
 
   /**
@@ -415,8 +434,9 @@ class SassScriptFunctions {
    * $amount is not a number
    * @see opacify
    */
-  public static function fade_in($colour, $amount, $ofCurrent = false) {
-    return self::opacify($colour, $amount, $ofCurrent);
+  public static function fade_in($colour, $amount, $ofCurrent = false)
+  {
+      return self::opacify($colour, $amount, $ofCurrent);
   }
 
   /**
@@ -431,8 +451,9 @@ class SassScriptFunctions {
    * $amount is not a number
    * @see transparentize
    */
-  public static function fade_out($colour, $amount, $ofCurrent = false) {
-    return self::transparentize($colour, $amount, $ofCurrent);
+  public static function fade_out($colour, $amount, $ofCurrent = false)
+  {
+      return self::transparentize($colour, $amount, $ofCurrent);
   }
 
   /**
@@ -442,8 +463,9 @@ class SassScriptFunctions {
    * @return new SassColour The comlemented colour
    * @uses adjust_hue()
    */
-  public static function complement($colour) {
-    // return self::adjust($colour, new SassNumber('180deg'), true, 'hue', self::INCREASE, 0, 360, '');
+  public static function complement($colour)
+  {
+      // return self::adjust($colour, new SassNumber('180deg'), true, 'hue', self::INCREASE, 0, 360, '');
     return self::adjust_hue($colour, new SassNumber('180deg'));
   }
 
@@ -453,8 +475,9 @@ class SassScriptFunctions {
    * @return new SassColour The greyscale colour
    * @see desaturate
    */
-  public static function grayscale($colour) {
-    return self::desaturate($colour, new SassNumber(100));
+  public static function grayscale($colour)
+  {
+      return self::desaturate($colour, new SassNumber(100));
   }
 
   /**
@@ -464,8 +487,9 @@ class SassScriptFunctions {
    * @return new SassColour The greyscale colour
    * @see desaturate
    */
-  public static function greyscale($colour) {
-    return self::desaturate($colour, new SassNumber(100));
+  public static function greyscale($colour)
+  {
+      return self::desaturate($colour, new SassNumber(100));
   }
 
   /**
@@ -474,9 +498,10 @@ class SassScriptFunctions {
    * @param SassColour: the colour
    * @return new SassColour: the inverted colour
    */
-  public static function invert($colour) {
-    SassLiteral::assertType($colour, 'SassColour');
-    return $colour->with(array(
+  public static function invert($colour)
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      return $colour->with(array(
       'red' => 255 - $colour->getRed(true),
       'blue' => 255 - $colour->getBlue(true),
       'green' => 255 - $colour->getGreen(true)
@@ -504,14 +529,15 @@ class SassScriptFunctions {
    * @throws SassScriptFunctionException If $colour1 or $colour2 is
    * not a colour
    */
-  public static function mix($colour1, $colour2, $weight = '50%') {
-    if (is_object($weight)) {
-      $weight = new SassNumber($weight);
-    }
-    SassLiteral::assertType($colour1, 'SassColour');
-    SassLiteral::assertType($colour2, 'SassColour');
-    SassLiteral::assertType($weight, 'SassNumber');
-    SassLiteral::assertInRange($weight, 0, 100, '%');
+  public static function mix($colour1, $colour2, $weight = '50%')
+  {
+      if (is_object($weight)) {
+          $weight = new SassNumber($weight);
+      }
+      SassLiteral::assertType($colour1, 'SassColour');
+      SassLiteral::assertType($colour2, 'SassColour');
+      SassLiteral::assertType($weight, 'SassNumber');
+      SassLiteral::assertInRange($weight, 0, 100, '%');
     /*
      * This algorithm factors in both the user-provided weight
      * and the difference between the alpha values of the two colours
@@ -536,22 +562,22 @@ class SassScriptFunctions {
      */
 
     $p = $weight->value/100;
-    $w = $p * 2 - 1;
-    $a = $colour1->alpha - $colour2->alpha;
+      $w = $p * 2 - 1;
+      $a = $colour1->alpha - $colour2->alpha;
 
 
-    $w1 = ((($w * $a == -1) ? $w : ($w + $a)/(1 + $w * $a)) + 1) / 2;
-    $w2 = 1 - $w1;
+      $w1 = ((($w * $a == -1) ? $w : ($w + $a)/(1 + $w * $a)) + 1) / 2;
+      $w2 = 1 - $w1;
 
-    $rgb1 = $colour1->getRgb();
-    $rgb2 = $colour2->getRgb();
-    $rgba = array();
-    foreach ($rgb1 as $key=>$value) {
-      $rgba[$key] = floor(($value * $w1) + ($rgb2[$key] * $w2));
-    } // foreach
+      $rgb1 = $colour1->getRgb();
+      $rgb2 = $colour2->getRgb();
+      $rgba = array();
+      foreach ($rgb1 as $key=>$value) {
+          $rgba[$key] = floor(($value * $w1) + ($rgb2[$key] * $w2));
+      } // foreach
     $rgba[] = floor($colour1->alpha * $p + $colour2->alpha * (1 - $p));
 
-    return new SassColour($rgba);
+      return new SassColour($rgba);
   }
 
   /**
@@ -560,13 +586,14 @@ class SassScriptFunctions {
    * @param SassNumber (red, green, blue, hue, saturation, lightness, alpha) - the amount(s) to adjust by
    * @return SassColour
    */
-  public static function adjust_color($color, $red = 0, $green = 0, $blue = 0, $hue = 0, $saturation = 0, $lightness = 0, $alpha = 0) {
-    foreach (array('red', 'green', 'blue', 'hue', 'saturation', 'lightness', 'alpha') as $property) {
-      $obj = $$property;
-      $color = self::adjust($color, $$property, FALSE, $property, self::INCREASE, 0, 255);
-    }
+  public static function adjust_color($color, $red = 0, $green = 0, $blue = 0, $hue = 0, $saturation = 0, $lightness = 0, $alpha = 0)
+  {
+      foreach (array('red', 'green', 'blue', 'hue', 'saturation', 'lightness', 'alpha') as $property) {
+          $obj = $$property;
+          $color = self::adjust($color, $$property, false, $property, self::INCREASE, 0, 255);
+      }
 
-    return $color;
+      return $color;
   }
 
   /**
@@ -575,15 +602,16 @@ class SassScriptFunctions {
    * @param SassNumber (red, green, blue, hue, saturation, lightness, alpha) - the amount(s) to scale by
    * @return SassColour
    */
-  public static function scale_color($color, $red = 0, $green = 0, $blue = 0, $hue = 0, $saturation = 0, $lightness = 0, $alpha = 0) {
-    $color->rgb2hsl();
-    foreach (array('red', 'green', 'blue', 'hue', 'saturation', 'lightness', 'alpha') as $i => $property) {
-      $obj = $$property;
-      $new = $color->$property + $color->$property * (0.01 * $obj->value);
-      $color->$property = $new;
-    }
-    $color->hsl2rgb();
-    return $color;
+  public static function scale_color($color, $red = 0, $green = 0, $blue = 0, $hue = 0, $saturation = 0, $lightness = 0, $alpha = 0)
+  {
+      $color->rgb2hsl();
+      foreach (array('red', 'green', 'blue', 'hue', 'saturation', 'lightness', 'alpha') as $i => $property) {
+          $obj = $$property;
+          $new = $color->$property + $color->$property * (0.01 * $obj->value);
+          $color->$property = $new;
+      }
+      $color->hsl2rgb();
+      return $color;
   }
 
   /**
@@ -592,15 +620,16 @@ class SassScriptFunctions {
    * @param SassNumber (red, green, blue, hue, saturation, lightness, alpha) - the amounts to scale by
    * @return SassColour
    */
-  public static function change_color($color, $red = false, $green = false, $blue = false, $hue = false, $saturation = false, $lightness = false, $alpha = false) {
-    $attrs = array();
-    foreach (array('red', 'green', 'blue', 'hue', 'saturation', 'lightness', 'alpha') as $i => $property) {
-      $obj = $$property;
-      if ($obj instanceof SassNumber) {
-        $attrs[$property] = $obj->value;
+  public static function change_color($color, $red = false, $green = false, $blue = false, $hue = false, $saturation = false, $lightness = false, $alpha = false)
+  {
+      $attrs = array();
+      foreach (array('red', 'green', 'blue', 'hue', 'saturation', 'lightness', 'alpha') as $i => $property) {
+          $obj = $$property;
+          if ($obj instanceof SassNumber) {
+              $attrs[$property] = $obj->value;
+          }
       }
-    }
-    return $color->with($attrs);
+      return $color->with($attrs);
   }
 
   /**
@@ -615,30 +644,30 @@ class SassScriptFunctions {
    * @param float maximum value the amount can bemixed
    * @param string amount units
    */
-  public static function adjust($colour, $amount, $ofCurrent, $att, $op, $min, $max, $units='') {
-    SassLiteral::assertType($colour, 'SassColour');
-    SassLiteral::assertType($amount, 'SassNumber');
+  public static function adjust($colour, $amount, $ofCurrent, $att, $op, $min, $max, $units='')
+  {
+      SassLiteral::assertType($colour, 'SassColour');
+      SassLiteral::assertType($amount, 'SassNumber');
     // SassLiteral::assertInRange($amount, $min, $max, $units);
     if (!is_bool($ofCurrent)) {
-      SassLiteral::assertType($ofCurrent, 'SassBoolean');
-      $ofCurrent = $ofCurrent->value;
+        SassLiteral::assertType($ofCurrent, 'SassBoolean');
+        $ofCurrent = $ofCurrent->value;
     }
-    $colour = clone $colour; # clone here to stop it altering original value
+      $colour = clone $colour; # clone here to stop it altering original value
 
     $amount = $amount->value * (($att === 'alpha' && $ofCurrent && $units === '') ? 100 : 1);
 
-    if ($att == 'red' || $att == 'blue' || $att == 'green') {
-      $colour->hsl2rgb();
-      $colour->$att = $ofCurrent ? $colour->$att * (1 + ($amount * ($op === self::INCREASE ? 1 : -1))/100) : $colour->$att + ($amount * ($op === self::INCREASE ? 1 : -1));
-      $colour->rgb2hsl();
-    }
-    else {
-      $colour->rgb2hsl();
-      $colour->$att = $ofCurrent ? $colour->$att * (1 + ($amount * ($op === self::INCREASE ? 1 : -1))/100) : $colour->$att + ($amount * ($op === self::INCREASE ? 1 : -1));
-      $colour->$att = max($min, min($max, $colour->$att));
-      $colour->hsl2rgb();
-    }
-    return $colour;
+      if ($att == 'red' || $att == 'blue' || $att == 'green') {
+          $colour->hsl2rgb();
+          $colour->$att = $ofCurrent ? $colour->$att * (1 + ($amount * ($op === self::INCREASE ? 1 : -1))/100) : $colour->$att + ($amount * ($op === self::INCREASE ? 1 : -1));
+          $colour->rgb2hsl();
+      } else {
+          $colour->rgb2hsl();
+          $colour->$att = $ofCurrent ? $colour->$att * (1 + ($amount * ($op === self::INCREASE ? 1 : -1))/100) : $colour->$att + ($amount * ($op === self::INCREASE ? 1 : -1));
+          $colour->$att = max($min, min($max, $colour->$att));
+          $colour->hsl2rgb();
+      }
+      return $colour;
   }
 
   /*
@@ -655,9 +684,10 @@ class SassScriptFunctions {
    * @return SassNumber The absolute value of the number
    * @throws SassScriptFunctionException If $number is not a number
    */
-  public static function abs($number) {
-    SassLiteral::assertType($number, 'SassNumber');
-    return new SassNumber(abs($number->value).$number->units);
+  public static function abs($number)
+  {
+      SassLiteral::assertType($number, 'SassNumber');
+      return new SassNumber(abs($number->value).$number->units);
   }
 
   /**
@@ -670,9 +700,10 @@ class SassScriptFunctions {
    * @return new SassNumber The rounded number
    * @throws SassScriptFunctionException If $number is not a number
    */
-  public static function ceil($number) {
-    SassLiteral::assertType($number, 'SassNumber');
-    return new SassNumber(ceil($number->value).$number->units);
+  public static function ceil($number)
+  {
+      SassLiteral::assertType($number, 'SassNumber');
+      return new SassNumber(ceil($number->value).$number->units);
   }
 
   /**
@@ -685,9 +716,10 @@ class SassScriptFunctions {
    * @return new SassNumber The rounded number
    * @throws SassScriptFunctionException If $value is not a number
    */
-  public static function floor($number) {
-    SassLiteral::assertType($number, 'SassNumber');
-    return new SassNumber(floor($number->value).$number->units);
+  public static function floor($number)
+  {
+      SassLiteral::assertType($number, 'SassNumber');
+      return new SassNumber(floor($number->value).$number->units);
   }
 
   /**
@@ -700,9 +732,10 @@ class SassScriptFunctions {
    * @return new SassNumber The rounded number
    * @throws SassScriptFunctionException If $number is not a number
    */
-  public static function round($number) {
-    SassLiteral::assertType($number, 'SassNumber');
-    return new SassNumber(round($number->value).$number->units);
+  public static function round($number)
+  {
+      SassLiteral::assertType($number, 'SassNumber');
+      return new SassNumber(round($number->value).$number->units);
   }
 
   /**
@@ -714,10 +747,11 @@ class SassScriptFunctions {
    * @throws SassScriptFunctionException If $number1 or $number2 is not
    * a number
    */
-  public static function comparable($number1, $number2) {
-    SassLiteral::assertType($number1, 'SassNumber');
-    SassLiteral::assertType($number2, 'SassNumber');
-    return new SassBoolean($number1->isComparableTo($number2));
+  public static function comparable($number1, $number2)
+  {
+      SassLiteral::assertType($number1, 'SassNumber');
+      SassLiteral::assertType($number2, 'SassNumber');
+      return new SassBoolean($number1->isComparableTo($number2));
   }
 
   /**
@@ -729,35 +763,38 @@ class SassScriptFunctions {
    * @return new SassNumber The number as a percentage
    * @throws SassScriptFunctionException If $number isn't a unitless number
    */
-  public static function percentage($number) {
-    $number->value *= 100;
-    $number->units = '%';
-    return $number;
+  public static function percentage($number)
+  {
+      $number->value *= 100;
+      $number->units = '%';
+      return $number;
   }
 
-  public static function max($n1, $n2, $n3 = false, $n4 = false, $n5 = false) {
-    $max = $n1;
-    for ($i = 2; $i <= 5; $i++) {
-      $var = 'n' . $i;
-      $var = $$var;
-      if ($var instanceof SassNumber && $var->op_gt($max)) {
-        $max = $var;
-      }
+    public static function max($n1, $n2, $n3 = false, $n4 = false, $n5 = false)
+    {
+        $max = $n1;
+        for ($i = 2; $i <= 5; $i++) {
+            $var = 'n' . $i;
+            $var = $$var;
+            if ($var instanceof SassNumber && $var->op_gt($max)) {
+                $max = $var;
+            }
+        }
+        return $max;
     }
-    return $max;
-  }
 
-  public static function min($n1, $n2, $n3 = false, $n4 = false, $n5 = false) {
-    $max = $n1;
-    for ($i = 2; $i <= 5; $i++) {
-      $var = 'n' . $i;
-      $var = $$var;
-      if ($var instanceof SassNumber && $var->op_lt($max)) {
-        $max = $var;
-      }
+    public static function min($n1, $n2, $n3 = false, $n4 = false, $n5 = false)
+    {
+        $max = $n1;
+        for ($i = 2; $i <= 5; $i++) {
+            $var = 'n' . $i;
+            $var = $$var;
+            if ($var instanceof SassNumber && $var->op_lt($max)) {
+                $max = $var;
+            }
+        }
+        return $max;
     }
-    return $max;
-  }
 
 
   /**
@@ -768,8 +805,9 @@ class SassScriptFunctions {
    * @throws SassScriptFunctionException If $number is not a number
    * @see units
    */
-  public static function unit($number) {
-    return self::units($number);
+  public static function unit($number)
+  {
+      return self::units($number);
   }
 
   /**
@@ -778,9 +816,10 @@ class SassScriptFunctions {
    * @return new SassString The units of the number
    * @throws SassScriptFunctionException If $number is not a number
    */
-  public static function units($number) {
-    SassLiteral::assertType($number, 'SassNumber');
-    return new SassString($number->units);
+  public static function units($number)
+  {
+      SassLiteral::assertType($number, 'SassNumber');
+      return new SassString($number->units);
   }
 
   /**
@@ -790,9 +829,10 @@ class SassScriptFunctions {
    * @return new SassBoolean True if the number is unitless, false if it has units.
    * @throws SassScriptFunctionException If $number is not a number
    */
-  public static function unitless($number) {
-    SassLiteral::assertType($number, 'SassNumber');
-    return new SassBoolean($number->isUnitless());
+  public static function unitless($number)
+  {
+      SassLiteral::assertType($number, 'SassNumber');
+      return new SassBoolean($number->isUnitless());
   }
 
   /*
@@ -807,9 +847,10 @@ class SassScriptFunctions {
    * @throws SassScriptFunctionException If $string is not a string
    * @see unquote
    */
-  public static function quote($string) {
-    SassLiteral::assertType($string, 'SassString');
-    return new SassString('"'.$string->value.'"');
+  public static function quote($string)
+  {
+      SassLiteral::assertType($string, 'SassString');
+      return new SassString('"'.$string->value.'"');
   }
 
   /**
@@ -820,11 +861,12 @@ class SassScriptFunctions {
    * @throws SassScriptFunctionException If $string is not a string
    * @see quote
    */
-  public static function unquote($string) {
-    if ($string instanceof SassString) {
-      return new SassString($string->value);
-    }
-    return $string;
+  public static function unquote($string)
+  {
+      if ($string instanceof SassString) {
+          return new SassString($string->value);
+      }
+      return $string;
   }
 
   /**
@@ -833,9 +875,10 @@ class SassScriptFunctions {
    * @return
    * @throws SassScriptFunctionException If $string is not a string
    */
-  public static function get_var($string) {
-    SassLiteral::assertType($string, 'SassString');
-    return new SassString($string->toVar());
+  public static function get_var($string)
+  {
+      SassLiteral::assertType($string, 'SassString');
+      return new SassString($string->toVar());
   }
 
   /**
@@ -847,11 +890,12 @@ class SassScriptFunctions {
     * @param SassList - the list to count
     * @return SassNumber
     */
-  public static function length($list) {
-    if ($list instanceOf SassString) {
-      $list = new SassList($list->toString());
-    }
-    return new SassNumber($list->length());
+  public static function length($list)
+  {
+      if ($list instanceof SassString) {
+          $list = new SassList($list->toString());
+      }
+      return new SassNumber($list->length());
   }
 
   /**
@@ -860,27 +904,30 @@ class SassScriptFunctions {
    * @param SassNumber - the value to get
    * @return anything
    */
-  public static function nth($list, $n) {
-    SassLiteral::assertType($n, 'SassNumber');
+  public static function nth($list, $n)
+  {
+      SassLiteral::assertType($n, 'SassNumber');
 
-    if ($list instanceof SassString) {
-      $list = new SassList($list->toString());
+      if ($list instanceof SassString) {
+          $list = new SassList($list->toString());
+      }
+
+      return $list->nth($n->value);
+  }
+
+    public static function join($one, $two, $sep = ', ')
+    {
+        return self::append($one, $two, $sep);
     }
 
-    return $list->nth($n->value);
-  }
-
-  public static function join($one, $two, $sep = ', ') {
-    return self::append($one, $two, $sep);
-  }
-
-  public static function append($list, $val, $sep = ', ') {
-    if ($list instanceOf SassString) {
-      $list = new SassList($list->toString());
+    public static function append($list, $val, $sep = ', ')
+    {
+        if ($list instanceof SassString) {
+            $list = new SassList($list->toString());
+        }
+        $list->append($val, $sep);
+        return $list;
     }
-    $list->append($val, $sep);
-    return $list;
-  }
 
 
   /*
@@ -894,8 +941,9 @@ class SassScriptFunctions {
    * @param anything - returns if Condition is true
    * @param anything - returns if Condition is false
    */
-  public static function _if($condition, $if_true, $if_false) {
-    return ($condition->value ? $if_true : $if_false);
+  public static function _if($condition, $if_true, $if_false)
+  {
+      return ($condition->value ? $if_true : $if_false);
   }
 
   /**
@@ -905,9 +953,10 @@ class SassScriptFunctions {
    * @throws SassScriptFunctionException If $obj is not an instance of a
    * SassLiteral
    */
-  public static function type_of($obj) {
-    SassLiteral::assertType($obj, 'SassLiteral');
-    return new SassString($obj->typeOf);
+  public static function type_of($obj)
+  {
+      SassLiteral::assertType($obj, 'SassLiteral');
+      return new SassString($obj->typeOf);
   }
 
   /**
@@ -917,7 +966,8 @@ class SassScriptFunctions {
    * @param float the maximum value
    * @return the value clipped to the range
    */
-   public static function inRange($value, $min, $max) {
-      return ($value < $min ? $min : ($value > $max ? $max : $value));
-  }
+   public static function inRange($value, $min, $max)
+   {
+       return ($value < $min ? $min : ($value > $max ? $max : $value));
+   }
 }

@@ -15,12 +15,13 @@
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassMixinDefinitionNode extends SassNode {
-  const NODE_IDENTIFIER = '=';
-  const MATCH = '/^(=|@mixin\s+)([-\w]+)\s*(?:\((.*?)\))?\s*$/im';
-  const IDENTIFIER = 1;
-  const NAME = 2;
-  const ARGUMENTS = 3;
+class SassMixinDefinitionNode extends SassNode
+{
+    const NODE_IDENTIFIER = '=';
+    const MATCH = '/^(=|@mixin\s+)([-\w]+)\s*(?:\((.*?)\))?\s*$/im';
+    const IDENTIFIER = 1;
+    const NAME = 2;
+    const ARGUMENTS = 3;
 
   /**
    * @var string name of the mixin
@@ -37,21 +38,22 @@ class SassMixinDefinitionNode extends SassNode {
    * @param object source token
    * @return SassMixinDefinitionNode
    */
-  public function __construct($token) {
+  public function __construct($token)
+  {
 
     // if ($token->level > 1) {
     //   throw new SassMixinDefinitionNodeException('Mixins can only be defined at root level. Token was set at level ' . $token->level, $token);
     // }
 
     preg_match(self::MATCH, $token->source, $matches);
-    parent::__construct($token);
-    if (empty($matches)) {
-      throw new SassMixinDefinitionNodeException('Invalid Mixin', $this);
-    }
-    $this->name = $matches[self::NAME];
-    if (isset($matches[self::ARGUMENTS])) {
-      $this->args = SassScriptFunction::extractArgs($matches[self::ARGUMENTS]);
-    }
+      parent::__construct($token);
+      if (empty($matches)) {
+          throw new SassMixinDefinitionNodeException('Invalid Mixin', $this);
+      }
+      $this->name = $matches[self::NAME];
+      if (isset($matches[self::ARGUMENTS])) {
+          $this->args = SassScriptFunction::extractArgs($matches[self::ARGUMENTS]);
+      }
   }
 
   /**
@@ -60,17 +62,19 @@ class SassMixinDefinitionNode extends SassNode {
    * @param SassContext the context in which this node is parsed
    * @return array the parsed node - an empty array
    */
-  public function parse($context) {
-    $context->addMixin($this->name, $this);
-    return array();
+  public function parse($context)
+  {
+      $context->addMixin($this->name, $this);
+      return array();
   }
 
   /**
    * Returns the arguments with default values for this mixin
    * @return array the arguments with default values for this mixin
    */
-  public function getArgs() {
-    return $this->args;
+  public function getArgs()
+  {
+      return $this->args;
   }
 
   /**
@@ -78,7 +82,8 @@ class SassMixinDefinitionNode extends SassNode {
    * @param object token
    * @return boolean true if the token represents this type of node, false if not
    */
-  public static function isa($token) {
-    return $token->source[0] === self::NODE_IDENTIFIER;
+  public static function isa($token)
+  {
+      return $token->source[0] === self::NODE_IDENTIFIER;
   }
 }

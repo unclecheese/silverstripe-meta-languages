@@ -17,11 +17,12 @@ require_once('SassLiteral.php');
  * @package      PHamlP
  * @subpackage  Sass.script.literals
  */
-class SassString extends SassLiteral {
-  const MATCH = '/^(((["\'])(.*?)(\3))|(-[a-zA-Z-]+[^\s]*?))/i';
-  const _MATCH = '/^(["\'])(.*?)(\1)?$/'; // Used to match strings such as "Times New Roman",serif
+class SassString extends SassLiteral
+{
+    const MATCH = '/^(((["\'])(.*?)(\3))|(-[a-zA-Z-]+[^\s]*?))/i';
+    const _MATCH = '/^(["\'])(.*?)(\1)?$/'; // Used to match strings such as "Times New Roman",serif
   const VALUE = 2;
-  const QUOTE = 3;
+    const QUOTE = 3;
 
   /**
    * @var string string quote type; double or single quotes, or unquoted.
@@ -33,16 +34,16 @@ class SassString extends SassLiteral {
    * @param string string
    * @return SassString
    */
-  public function __construct($value) {
-    preg_match(self::_MATCH, $value, $matches);
-    if ((isset($matches[self::QUOTE]))) {
-      $this->quote =  $matches[self::QUOTE];
-      $this->value = $matches[self::VALUE];
-    }
-    else {
-      $this->quote =  '';
-      $this->value = $value;
-    }
+  public function __construct($value)
+  {
+      preg_match(self::_MATCH, $value, $matches);
+      if ((isset($matches[self::QUOTE]))) {
+          $this->quote =  $matches[self::QUOTE];
+          $this->value = $matches[self::VALUE];
+      } else {
+          $this->quote =  '';
+          $this->value = $value;
+      }
   }
 
   /**
@@ -52,9 +53,10 @@ class SassString extends SassLiteral {
    * @param sassString string to add to this
    * @return sassString the string result
    */
-  public function op_plus($other) {
-    $this->value .= $other->value;
-    return $this;
+  public function op_plus($other)
+  {
+      $this->value .= $other->value;
+      return $this;
   }
 
   /**
@@ -63,52 +65,58 @@ class SassString extends SassLiteral {
    * @param sassNumber the number of times to repeat this
    * @return sassString the string result
    */
-  public function op_times($other) {
-    if (!($other instanceof SassNumber) || !$other->isUnitless()) {
-      throw new SassStringException('Value must be a unitless number', SassScriptParser::$context->node);
-    }
-    $this->value = str_repeat($this->value, $other->value);
-    return $this;
+  public function op_times($other)
+  {
+      if (!($other instanceof SassNumber) || !$other->isUnitless()) {
+          throw new SassStringException('Value must be a unitless number', SassScriptParser::$context->node);
+      }
+      $this->value = str_repeat($this->value, $other->value);
+      return $this;
   }
 
   /**
    * Evaluates the value as a boolean.
    */
-  public function toBoolean() {
-    $value = strtolower(trim($this->value, ' "\''));
-    if (!$value || in_array($value, array('false', 'null', '0'))) {
-      return FALSE;
-    }
-    return TRUE;
+  public function toBoolean()
+  {
+      $value = strtolower(trim($this->value, ' "\''));
+      if (!$value || in_array($value, array('false', 'null', '0'))) {
+          return false;
+      }
+      return true;
   }
 
   /**
    * Returns the value of this string.
    * @return string the string
    */
-  public function getValue() {
-    return $this->value;
+  public function getValue()
+  {
+      return $this->value;
   }
 
   /**
    * Returns a string representation of the value.
    * @return string string representation of the value.
    */
-  public function toString() {
-    $value = strlen(trim($this->value)) ? trim($this->value) : $this->value;
-    return $this->quote . $value . $this->quote;
+  public function toString()
+  {
+      $value = strlen(trim($this->value)) ? trim($this->value) : $this->value;
+      return $this->quote . $value . $this->quote;
   }
 
-  public function toVar() {
-    return SassScriptParser::$context->getVariable($this->value);
-  }
-
-  public function getTypeOf() {
-    if (SassList::isa($this->toString())) {
-      return 'list';
+    public function toVar()
+    {
+        return SassScriptParser::$context->getVariable($this->value);
     }
-    return 'string';
-  }
+
+    public function getTypeOf()
+    {
+        if (SassList::isa($this->toString())) {
+            return 'list';
+        }
+        return 'string';
+    }
 
   /**
    * Returns a value indicating if a token of this type can be matched at
@@ -116,7 +124,8 @@ class SassString extends SassLiteral {
    * @param string the subject string
    * @return mixed match at the start of the string or false if no match
    */
-  public static function isa($subject) {
-    return (preg_match(self::MATCH, $subject, $matches) ? $matches[0] : false);
+  public static function isa($subject)
+  {
+      return (preg_match(self::MATCH, $subject, $matches) ? $matches[0] : false);
   }
 }
