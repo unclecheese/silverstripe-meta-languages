@@ -19,14 +19,15 @@ require_once('SassNestedRenderer.php');
  * @package      PHamlP
  * @subpackage  Sass.renderers
  */
-class SassRenderer {
-  /**#@+
+class SassRenderer
+{
+    /**#@+
    * Output Styles
    */
   const STYLE_COMPRESSED = 'compressed';
-  const STYLE_COMPACT    = 'compact';
-  const STYLE_EXPANDED    = 'expanded';
-  const STYLE_NESTED      = 'nested';
+    const STYLE_COMPACT    = 'compact';
+    const STYLE_EXPANDED    = 'expanded';
+    const STYLE_NESTED      = 'nested';
   /**#@-*/
 
   const INDENT = '  ';
@@ -36,8 +37,9 @@ class SassRenderer {
    * @param string render style
    * @return SassRenderer
    */
-  public static function getRenderer($style) {
-    switch ($style) {
+  public static function getRenderer($style)
+  {
+      switch ($style) {
       case self::STYLE_COMPACT:
         return new SassCompactRenderer();
       case self::STYLE_COMPRESSED:

@@ -32,26 +32,27 @@
  * @package      PHamlP
  * @subpackage  Sass
  */
-class SassParser {
-  /**#@+
+class SassParser
+{
+    /**#@+
    * Default option values
    */
   const BEGIN_COMMENT      = '/';
-  const BEGIN_CSS_COMMENT  = '/*';
-  const END_CSS_COMMENT    = '*/';
-  const BEGIN_SASS_COMMENT = '//';
-  const BEGIN_INTERPOLATION = '#';
-  const BEGIN_INTERPOLATION_BLOCK = '#{';
-  const BEGIN_BLOCK        = '{';
-  const END_BLOCK          = '}';
-  const END_STATEMENT      = ';';
-  const DOUBLE_QUOTE       = '"';
-  const SINGLE_QUOTE       = "'";
+    const BEGIN_CSS_COMMENT  = '/*';
+    const END_CSS_COMMENT    = '*/';
+    const BEGIN_SASS_COMMENT = '//';
+    const BEGIN_INTERPOLATION = '#';
+    const BEGIN_INTERPOLATION_BLOCK = '#{';
+    const BEGIN_BLOCK        = '{';
+    const END_BLOCK          = '}';
+    const END_STATEMENT      = ';';
+    const DOUBLE_QUOTE       = '"';
+    const SINGLE_QUOTE       = "'";
 
   /**
    * Static holder for last instance of a SassParser
    */
-  static public $instance;
+  public static $instance;
 
   /**
    * @var string the character used for indenting
@@ -138,7 +139,7 @@ class SassParser {
    * Defaults to './sass-templates'.
    */
   public $load_paths;
-  public $load_path_functions;
+    public $load_path_functions;
 
   /**
    * property_syntax:
@@ -212,7 +213,7 @@ class SassParser {
    *
    * Defaults to FALSE
    */
-  public $debug = FALSE;
+  public $debug = false;
 
   /**
    * Constructor.
@@ -220,52 +221,53 @@ class SassParser {
    * @param array $options
    * @return SassParser
    */
-  public function __construct($options = array()) {
-    if (!is_array($options)) {
-      if (isset($options['debug']) && $options['debug']) {
-        throw new SassException('Options must be an array');
+  public function __construct($options = array())
+  {
+      if (!is_array($options)) {
+          if (isset($options['debug']) && $options['debug']) {
+              throw new SassException('Options must be an array');
+          }
+          $options = count((array) $options) ? (array) $options : array();
       }
-      $options = count((array) $options) ? (array) $options : array();
-    }
-    unset($options['language']);
+      unset($options['language']);
 
-    $basepath = $_SERVER['PHP_SELF'];
-    $basepath = substr($basepath, 0, strrpos($basepath, '/') + 1);
+      $basepath = $_SERVER['PHP_SELF'];
+      $basepath = substr($basepath, 0, strrpos($basepath, '/') + 1);
 
-    $defaultOptions = array(
+      $defaultOptions = array(
       'basepath' => $basepath,
-      'debug_info' => FALSE,
+      'debug_info' => false,
       'filename' => array('dirname' => '', 'basename' => ''),
       'functions' => array(),
       'load_paths' => array(),
       'load_path_functions' => array(),
       'line' => 1,
-      'line_numbers' => FALSE,
+      'line_numbers' => false,
       'style' => SassRenderer::STYLE_NESTED,
       'syntax' => SassFile::SASS,
       'debug' => true,
-      'quiet' => FALSE,
+      'quiet' => false,
       'callbacks' => array(
-        'warn' => FALSE,
-        'debug' => FALSE,
+        'warn' => false,
+        'debug' => false,
       ),
     );
 
-    if (isset(self::$instance)) {
-      $defaultOptions['load_paths'] = self::$instance->load_paths;
-    }
+      if (isset(self::$instance)) {
+          $defaultOptions['load_paths'] = self::$instance->load_paths;
+      }
 
-    $options = array_merge($defaultOptions, $options);
+      $options = array_merge($defaultOptions, $options);
 
-    self::$instance = $this;
-    self::$functions = $options['functions'];
-    unset($options['functions']);
+      self::$instance = $this;
+      self::$functions = $options['functions'];
+      unset($options['functions']);
 
-    foreach ($options as $name=>$value) {
-      $this->$name = $value;
-    }
+      foreach ($options as $name=>$value) {
+          $this->$name = $value;
+      }
 
-    $GLOBALS['SassParser_debug'] = $this->debug;
+      $GLOBALS['SassParser_debug'] = $this->debug;
   }
 
   /**
@@ -273,84 +275,101 @@ class SassParser {
    * @param string name of property to get
    * @return mixed return value of getter function
    */
-  public function __get($name) {
-    $getter = 'get' . ucfirst($name);
-    if (method_exists($this, $getter)) {
-      return $this->$getter();
+  public function __get($name)
+  {
+      $getter = 'get' . ucfirst($name);
+      if (method_exists($this, $getter)) {
+          return $this->$getter();
+      }
+      if (property_exists($this, $name)) {
+          return $this->$name;
+      }
+      if ($this->debug) {
+          throw new SassException('No getter function for ' . $name);
+      }
+  }
+
+    public function getBasepath()
+    {
+        return $this->basepath;
     }
-    if (property_exists($this, $name)) {
-      return $this->$name;
+
+    public function getDebug_info()
+    {
+        return $this->debug_info;
     }
-    if ($this->debug) {
-      throw new SassException('No getter function for ' . $name);
+
+    public function getFilename()
+    {
+        return $this->filename;
     }
-  }
 
-  public function getBasepath() {
-    return $this->basepath;
-  }
+    public function getLine()
+    {
+        return $this->line;
+    }
 
-  public function getDebug_info() {
-    return $this->debug_info;
-  }
+    public function getSource()
+    {
+        return $this->source;
+    }
 
-  public function getFilename() {
-    return $this->filename;
-  }
+    public function getLine_numbers()
+    {
+        return $this->line_numbers;
+    }
 
-  public function getLine() {
-    return $this->line;
-  }
+    public function getFunctions()
+    {
+        return self::$functions;
+    }
 
-  public function getSource() {
-    return $this->source;
-  }
+    public function getLoad_paths()
+    {
+        return $this->load_paths;
+    }
 
-  public function getLine_numbers() {
-    return $this->line_numbers;
-  }
+    public function getLoad_path_functions()
+    {
+        return $this->load_path_functions;
+    }
 
-  public function getFunctions() {
-    return self::$functions;
-  }
+    public function getProperty_syntax()
+    {
+        return $this->property_syntax;
+    }
 
-  public function getLoad_paths() {
-    return $this->load_paths;
-  }
+    public function getQuiet()
+    {
+        return $this->quiet;
+    }
 
-  public function getLoad_path_functions() {
-    return $this->load_path_functions;
-  }
+    public function getStyle()
+    {
+        return $this->style;
+    }
 
-  public function getProperty_syntax() {
-    return $this->property_syntax;
-  }
+    public function getSyntax()
+    {
+        return $this->syntax;
+    }
 
-  public function getQuiet() {
-    return $this->quiet;
-  }
+    public function getDebug()
+    {
+        return $this->debug;
+    }
 
-  public function getStyle() {
-    return $this->style;
-  }
-
-  public function getSyntax() {
-    return $this->syntax;
-  }
-
-  public function getDebug() {
-    return $this->debug;
-  }
-
-  public function getCallbacks() {
-    return $this->callbacks + array(
-      'warn' => NULL,
-      'debug' => NULL,
+    public function getCallbacks()
+    {
+        return $this->callbacks + array(
+      'warn' => null,
+      'debug' => null,
     );
-  }
+    }
 
-  public function getOptions() {
-    return array(
+    public function getOptions()
+    {
+        return array(
       'callbacks' => $this->callbacks,
       // 'debug' => $this->debug,
       'filename' => $this->filename,
@@ -364,15 +383,16 @@ class SassParser {
       'style' => $this->style,
       'syntax' => $this->syntax,
     );
-  }
+    }
 
   /**
    * Parse a sass file or Sass source code and returns the CSS.
    * @param string name of source file or Sass source
    * @return string CSS
    */
-  public function toCss($source, $isFile = true) {
-    return $this->parse($source, $isFile)->render();
+  public function toCss($source, $isFile = true)
+  {
+      return $this->parse($source, $isFile)->render();
   }
 
   /**
@@ -383,40 +403,40 @@ class SassParser {
    * @param string name of source file or Sass source
    * @return SassRootNode Root node of document tree
    */
-  public function parse($source, $isFile = true) {
-    # Richard Lyon - 2011-10-25 - ignore unfound files
+  public function parse($source, $isFile = true)
+  {
+      # Richard Lyon - 2011-10-25 - ignore unfound files
     # Richard Lyon - 2011-10-25 - add multiple files to load functions
     if (!$source) {
-      return $this->toTree($source);
+        return $this->toTree($source);
     }
 
-    if (is_array($source)) {
-      $return = array();
-      foreach ($source as $source_file) {
-        $return = array_merge($return, $this->parse($source_file, TRUE));
-      }
-      return $return;
-    }
-
-    if ($isFile && $files = SassFile::get_file($source, $this)) {
-      $files_source = '';
-      foreach ($files as $file) {
-        $this->filename = $file;
-
-        $this->syntax = substr($this->filename, -4);
-        if ($this->syntax !== SassFile::SASS && $this->syntax !== SassFile::SCSS) {
-          if ($this->debug) {
-            throw new SassException('Invalid {what}', array('{what}' => 'syntax option'));
+      if (is_array($source)) {
+          $return = array();
+          foreach ($source as $source_file) {
+              $return = array_merge($return, $this->parse($source_file, true));
           }
-          return FALSE;
-        }
-        $files_source .= SassFile::get_file_contents($this->filename, $this);
+          return $return;
       }
-      return $this->toTree($files_source);
-    }
-    else {
-      return $this->toTree($source);
-    }
+
+      if ($isFile && $files = SassFile::get_file($source, $this)) {
+          $files_source = '';
+          foreach ($files as $file) {
+              $this->filename = $file;
+
+              $this->syntax = substr($this->filename, -4);
+              if ($this->syntax !== SassFile::SASS && $this->syntax !== SassFile::SCSS) {
+                  if ($this->debug) {
+                      throw new SassException('Invalid {what}', array('{what}' => 'syntax option'));
+                  }
+                  return false;
+              }
+              $files_source .= SassFile::get_file_contents($this->filename, $this);
+          }
+          return $this->toTree($files_source);
+      } else {
+          return $this->toTree($source);
+      }
   }
 
   /**
@@ -425,19 +445,19 @@ class SassParser {
    * @param string Sass source
    * @return SassRootNode the root of this document tree
    */
-  public function toTree($source) {
-    if ($this->syntax === SassFile::SASS) {
-      $source = str_replace(array("\r\n", "\n\r", "\r"), "\n", $source);
-      $this->source = explode("\n", $source);
-      $this->setIndentChar();
-    }
-    else {
-      $this->source = $source;
-    }
-    unset($source);
-    $root = new SassRootNode($this);
-    $this->buildTree($root);
-    return $root;
+  public function toTree($source)
+  {
+      if ($this->syntax === SassFile::SASS) {
+          $source = str_replace(array("\r\n", "\n\r", "\r"), "\n", $source);
+          $this->source = explode("\n", $source);
+          $this->setIndentChar();
+      } else {
+          $this->source = $source;
+      }
+      unset($source);
+      $root = new SassRootNode($this);
+      $this->buildTree($root);
+      return $root;
   }
 
   /**
@@ -445,13 +465,14 @@ class SassParser {
    * Called recursivly until the source is parsed.
    * @param SassNode the node
    */
-  public function buildTree($parent) {
-    $node = $this->getNode($parent);
-    while (is_object($node) && $node->isChildOf($parent)) {
-      $parent->addChild($node);
-      $node = $this->buildTree($node);
-    }
-    return $node;
+  public function buildTree($parent)
+  {
+      $node = $this->getNode($parent);
+      while (is_object($node) && $node->isChildOf($parent)) {
+          $parent->addChild($node);
+          $node = $this->buildTree($node);
+      }
+      return $node;
   }
 
   /**
@@ -460,10 +481,13 @@ class SassParser {
    * @return SassNode a SassNode of the appropriate type. Null when no more
    * source to parse.
    */
-  public function getNode($node) {
-    $token = $this->getToken();
-    if (empty($token)) return null;
-    switch (true) {
+  public function getNode($node)
+  {
+      $token = $this->getToken();
+      if (empty($token)) {
+          return null;
+      }
+      switch (true) {
       case SassDirectiveNode::isa($token):
         return $this->parseDirective($token, $node);
       case SassCommentNode::isa($token):
@@ -476,23 +500,21 @@ class SassParser {
         return new SassFunctionDefinitionNode($token);
       case SassMixinDefinitionNode::isa($token):
         if ($this->syntax === SassFile::SCSS) {
-          if ($this->debug) {
-            throw new SassException('Mixin definition shortcut not allowed in SCSS', $this);
-          }
-          return;
-        }
-        else {
-          return new SassMixinDefinitionNode($token);
+            if ($this->debug) {
+                throw new SassException('Mixin definition shortcut not allowed in SCSS', $this);
+            }
+            return;
+        } else {
+            return new SassMixinDefinitionNode($token);
         }
       case SassMixinNode::isa($token):
         if ($this->syntax === SassFile::SCSS) {
-          if ($this->debug) {
-            throw new SassException('Mixin include shortcut not allowed in SCSS', $this);
-          }
-          return;
-        }
-        else {
-          return new SassMixinNode($token);
+            if ($this->debug) {
+                throw new SassException('Mixin include shortcut not allowed in SCSS', $this);
+            }
+            return;
+        } else {
+            return new SassMixinNode($token);
         }
       default:
         return new SassRuleNode($token);
@@ -505,8 +527,9 @@ class SassParser {
    * meta data about it.
    * @return object
    */
-  public function getToken() {
-    return ($this->syntax === SassFile::SASS ? $this->sass2Token() : $this->scss2Token());
+  public function getToken()
+  {
+      return ($this->syntax === SassFile::SASS ? $this->sass2Token() : $this->scss2Token());
   }
 
   /**
@@ -516,67 +539,67 @@ class SassParser {
    * CSS comments and selectors, are assembled into a single statement.
    * @return object Statement token. Null if end of source.
    */
-  public function sass2Token() {
-    $statement = ''; // source line being tokenised
+  public function sass2Token()
+  {
+      $statement = ''; // source line being tokenised
     $token = null;
 
-    while (is_null($token) && !empty($this->source)) {
-      while (empty($statement) && is_array($this->source) && !empty($this->source)) {
-        $source = array_shift($this->source);
-        $statement = trim($source);
-        $this->line++;
-      }
+      while (is_null($token) && !empty($this->source)) {
+          while (empty($statement) && is_array($this->source) && !empty($this->source)) {
+              $source = array_shift($this->source);
+              $statement = trim($source);
+              $this->line++;
+          }
 
-      if (empty($statement)) {
-        break;
-      }
+          if (empty($statement)) {
+              break;
+          }
 
-      $level = $this->getLevel($source);
+          $level = $this->getLevel($source);
 
       // Comment statements can span multiple lines
       if ($statement[0] === self::BEGIN_COMMENT) {
-        // Consume Sass comments
+          // Consume Sass comments
         if (substr($statement, 0, strlen(self::BEGIN_SASS_COMMENT)) === self::BEGIN_SASS_COMMENT) {
-          unset($statement);
-          while($this->getLevel($this->source[0]) > $level) {
-            array_shift($this->source);
-            $this->line++;
-          }
-          continue;
+            unset($statement);
+            while ($this->getLevel($this->source[0]) > $level) {
+                array_shift($this->source);
+                $this->line++;
+            }
+            continue;
         }
         // Build CSS comments
         elseif (substr($statement, 0, strlen(self::BEGIN_CSS_COMMENT))
             === self::BEGIN_CSS_COMMENT) {
-          while($this->getLevel($this->source[0]) > $level) {
-            $statement .= "\n" . ltrim(array_shift($this->source));
-            $this->line++;
-          }
-        }
-        else {
-          $this->source = $statement;
+            while ($this->getLevel($this->source[0]) > $level) {
+                $statement .= "\n" . ltrim(array_shift($this->source));
+                $this->line++;
+            }
+        } else {
+            $this->source = $statement;
 
-          if ($this->debug) {
-            throw new SassException('Illegal comment type', $this);
-          }
+            if ($this->debug) {
+                throw new SassException('Illegal comment type', $this);
+            }
         }
       }
       // Selector statements can span multiple lines
       elseif (substr($statement, -1) === SassRuleNode::CONTINUED) {
-        // Build the selector statement
-        while($this->getLevel($this->source[0]) === $level) {
-          $statement .= ltrim(array_shift($this->source));
-          $this->line++;
+          // Build the selector statement
+        while ($this->getLevel($this->source[0]) === $level) {
+            $statement .= ltrim(array_shift($this->source));
+            $this->line++;
         }
       }
 
-      $token = (object) array(
+          $token = (object) array(
         'source' => $statement,
         'level' => $level,
         'filename' => $this->filename,
         'line' => $this->line - 1,
       );
-    }
-    return $token;
+      }
+      return $token;
   }
 
   /**
@@ -586,23 +609,23 @@ class SassParser {
    * @return integer the level of the source
    * @throws Exception if the source indentation is invalid
    */
-  public function getLevel($source) {
-    $indent = strlen($source) - strlen(ltrim($source));
-    $level = $indent/$this->indentSpaces;
-    if (is_float($level)) {
-      $level = (int) ceil($level);
-    }
-    if (!is_int($level) || preg_match("/[^{$this->indentChar}]/", substr($source, 0, $indent))) {
-      $this->source = $source;
+  public function getLevel($source)
+  {
+      $indent = strlen($source) - strlen(ltrim($source));
+      $level = $indent/$this->indentSpaces;
+      if (is_float($level)) {
+          $level = (int) ceil($level);
+      }
+      if (!is_int($level) || preg_match("/[^{$this->indentChar}]/", substr($source, 0, $indent))) {
+          $this->source = $source;
 
-      if ($this->debug) {
-        throw new SassException('Invalid indentation', $this);
+          if ($this->debug) {
+              throw new SassException('Invalid indentation', $this);
+          } else {
+              return 0;
+          }
       }
-      else {
-        return 0;
-      }
-    }
-    return $level;
+      return $level;
   }
 
   /**
@@ -610,61 +633,60 @@ class SassParser {
    * about it from SCSS source.
    * @return object Statement token. Null if end of source.
    */
-  public function scss2Token() {
-    static $srcpos = 0; // current position in the source stream
+  public function scss2Token()
+  {
+      static $srcpos = 0; // current position in the source stream
     static $srclen; // the length of the source stream
 
     $statement = '';
-    $token = null;
-    if (empty($srclen)) {
-      $srclen = strlen($this->source);
-    }
-    while (is_null($token) && $srcpos < strlen($this->source)) {
-      $c = $this->source[$srcpos++];
-      switch ($c) {
+      $token = null;
+      if (empty($srclen)) {
+          $srclen = strlen($this->source);
+      }
+      while (is_null($token) && $srcpos < strlen($this->source)) {
+          $c = $this->source[$srcpos++];
+          switch ($c) {
         case self::BEGIN_COMMENT:
           if (substr($this->source, $srcpos-1, strlen(self::BEGIN_SASS_COMMENT)) === self::BEGIN_SASS_COMMENT) {
-            while ($this->source[$srcpos++] !== "\n");
-            $statement .= "\n";
-          }
-          elseif (substr($this->source, $srcpos-1, strlen(self::BEGIN_CSS_COMMENT)) === self::BEGIN_CSS_COMMENT) {
-            if (ltrim($statement)) {
-              if ($this->debug) {
-                throw new SassException('Invalid comment', (object) array(
+              while ($this->source[$srcpos++] !== "\n");
+              $statement .= "\n";
+          } elseif (substr($this->source, $srcpos-1, strlen(self::BEGIN_CSS_COMMENT)) === self::BEGIN_CSS_COMMENT) {
+              if (ltrim($statement)) {
+                  if ($this->debug) {
+                      throw new SassException('Invalid comment', (object) array(
                   'source' => $statement,
                   'filename' => $this->filename,
                   'line' => $this->line,
                 ));
+                  }
               }
-            }
-            $statement .= $c.$this->source[$srcpos++];
-            while (substr($this->source, $srcpos, strlen(self::END_CSS_COMMENT)) !== self::END_CSS_COMMENT) {
-              $statement .= $this->source[$srcpos++];
-            }
-            $srcpos += strlen(self::END_CSS_COMMENT);
-            $token = $this->createToken($statement.self::END_CSS_COMMENT);
-          }
-          else {
-            $statement .= $c;
+              $statement .= $c.$this->source[$srcpos++];
+              while (substr($this->source, $srcpos, strlen(self::END_CSS_COMMENT)) !== self::END_CSS_COMMENT) {
+                  $statement .= $this->source[$srcpos++];
+              }
+              $srcpos += strlen(self::END_CSS_COMMENT);
+              $token = $this->createToken($statement.self::END_CSS_COMMENT);
+          } else {
+              $statement .= $c;
           }
           break;
         case self::DOUBLE_QUOTE:
         case self::SINGLE_QUOTE:
           $statement .= $c;
           while (isset($this->source[$srcpos]) && $this->source[$srcpos] !== $c) {
-            $statement .= $this->source[$srcpos++];
+              $statement .= $this->source[$srcpos++];
           }
           if (isset($this->source[$srcpos+1])) {
-            $statement .= $this->source[$srcpos++];
+              $statement .= $this->source[$srcpos++];
           }
           break;
         case self::BEGIN_INTERPOLATION:
           $statement .= $c;
           if (substr($this->source, $srcpos-1, strlen(self::BEGIN_INTERPOLATION_BLOCK)) === self::BEGIN_INTERPOLATION_BLOCK) {
-            while ($this->source[$srcpos] !== self::END_BLOCK) {
+              while ($this->source[$srcpos] !== self::END_BLOCK) {
+                  $statement .= $this->source[$srcpos++];
+              }
               $statement .= $this->source[$srcpos++];
-            }
-            $statement .= $this->source[$srcpos++];
           }
           break;
         case self::BEGIN_BLOCK:
@@ -672,20 +694,20 @@ class SassParser {
         case self::END_STATEMENT:
           $token = $this->createToken($statement . $c);
           if (is_null($token)) {
-            $statement = '';
+              $statement = '';
           }
           break;
         default:
           $statement .= $c;
           break;
       }
-    }
+      }
 
-    if (is_null($token)) {
-      $srclen = $srcpos = 0;
-    }
+      if (is_null($token)) {
+          $srclen = $srcpos = 0;
+      }
 
-    return $token;
+      return $token;
   }
 
   /**
@@ -695,26 +717,27 @@ class SassParser {
    * @param string source statement
    * @return SassToken
    */
-  public function createToken($statement) {
-    static $level = 0;
+  public function createToken($statement)
+  {
+      static $level = 0;
 
-    $this->line += substr_count($statement, "\n");
-    $statement = trim($statement);
-    if (substr($statement, 0, strlen(self::BEGIN_CSS_COMMENT)) !== self::BEGIN_CSS_COMMENT) {
-      $statement = str_replace(array("\n","\r"), '', $statement);
-    }
-    $last = substr($statement, -1);
+      $this->line += substr_count($statement, "\n");
+      $statement = trim($statement);
+      if (substr($statement, 0, strlen(self::BEGIN_CSS_COMMENT)) !== self::BEGIN_CSS_COMMENT) {
+          $statement = str_replace(array("\n", "\r"), '', $statement);
+      }
+      $last = substr($statement, -1);
     // Trim the statement removing whitespace, end statement (;), begin block ({), and (unless the statement ends in an interpolation block) end block (})
     $statement = rtrim($statement, ' '.self::BEGIN_BLOCK.self::END_STATEMENT);
-    $statement = (preg_match('/#\{.+?\}$/i', $statement) ? $statement : rtrim($statement, self::END_BLOCK));
-    $token = ($statement ? (object) array(
+      $statement = (preg_match('/#\{.+?\}$/i', $statement) ? $statement : rtrim($statement, self::END_BLOCK));
+      $token = ($statement ? (object) array(
       'source' => $statement,
       'level' => $level,
       'filename' => $this->filename,
       'line' => $this->line,
     ) : null);
-    $level += ($last === self::BEGIN_BLOCK ? 1 : ($last === self::END_BLOCK ? -1 : 0));
-    return $token;
+      $level += ($last === self::BEGIN_BLOCK ? 1 : ($last === self::END_BLOCK ? -1 : 0));
+      return $token;
   }
 
   /**
@@ -723,8 +746,9 @@ class SassParser {
    * @param SassNode parent node
    * @return SassNode a Sass directive node
    */
-  public function parseDirective($token, $parent) {
-    switch (SassDirectiveNode::extractDirective($token)) {
+  public function parseDirective($token, $parent)
+  {
+      switch (SassDirectiveNode::extractDirective($token)) {
       case '@content':
         return new SassContentNode($token);
         break;
@@ -748,16 +772,16 @@ class SassParser {
         break;
       case '@import':
         if ($this->syntax == SassFile::SASS) {
-          $i = 0;
-          $source = '';
-          while (sizeof($this->source) > $i && empty($source) && isset($this->source[$i + 1])) {
-            $source = $this->source[$i++];
-          }
-          if (!empty($source) && $this->getLevel($source) > $token->level) {
-            if ($this->debug) {
-              throw new SassException('Nesting not allowed beneath @import directive', $token);
+            $i = 0;
+            $source = '';
+            while (sizeof($this->source) > $i && empty($source) && isset($this->source[$i + 1])) {
+                $source = $this->source[$i++];
             }
-          }
+            if (!empty($source) && $this->getLevel($source) > $token->level) {
+                if ($this->debug) {
+                    throw new SassException('Nesting not allowed beneath @import directive', $token);
+                }
+            }
         }
         return new SassImportNode($token, $parent);
         break;
@@ -798,23 +822,24 @@ class SassParser {
    * @throws SassException if the indent is mixed or
    * the indent character can not be determined
    */
-  public function setIndentChar() {
-    foreach ($this->source as $l=>$source) {
-      if (!empty($source) && in_array($source[0], $this->indentChars)) {
-        $this->indentChar = $source[0];
-        for  ($i = 0, $len = strlen($source); $i < $len && $source[$i] == $this->indentChar; $i++);
-        if ($i < $len && in_array($source[$i], $this->indentChars)) {
-          $this->line = ++$l;
-          $this->source = $source;
-          if ($this->debug) {
-            throw new SassException('Mixed indentation not allowed', $this);
+  public function setIndentChar()
+  {
+      foreach ($this->source as $l=>$source) {
+          if (!empty($source) && in_array($source[0], $this->indentChars)) {
+              $this->indentChar = $source[0];
+              for ($i = 0, $len = strlen($source); $i < $len && $source[$i] == $this->indentChar; $i++);
+              if ($i < $len && in_array($source[$i], $this->indentChars)) {
+                  $this->line = ++$l;
+                  $this->source = $source;
+                  if ($this->debug) {
+                      throw new SassException('Mixed indentation not allowed', $this);
+                  }
+              }
+              $this->indentSpaces = ($this->indentChar == ' ' ? $i : 1);
+              return;
           }
-        }
-        $this->indentSpaces = ($this->indentChar == ' ' ? $i : 1);
-        return;
-      }
-    } // foreach
+      } // foreach
     $this->indentChar = ' ';
-    $this->indentSpaces = 2;
+      $this->indentSpaces = 2;
   }
 }

@@ -22,11 +22,12 @@
  * @package  PHamlP
  * @subpackage  Sass.tree
  */
-class SassEachNode extends SassNode {
-  const MATCH = '/@each\s+[!\$](.+?)in\s+(.+)$/i';
+class SassEachNode extends SassNode
+{
+    const MATCH = '/@each\s+[!\$](.+?)in\s+(.+)$/i';
 
-  const VARIABLE = 1;
-  const IN = 2;
+    const VARIABLE = 1;
+    const IN = 2;
 
   /**
    * @var string variable name for the loop
@@ -42,15 +43,15 @@ class SassEachNode extends SassNode {
    * @param object source token
    * @return SassEachNode
    */
-  public function __construct($token) {
-    parent::__construct($token);
-    if (!preg_match(self::MATCH, $token->source, $matches)) {
-      throw new SassEachNodeException('Invalid @each directive', $this);
-    }
-    else {
-      $this->variable = trim($matches[self::VARIABLE]);
-      $this->in = $matches[self::IN];
-    }
+  public function __construct($token)
+  {
+      parent::__construct($token);
+      if (!preg_match(self::MATCH, $token->source, $matches)) {
+          throw new SassEachNodeException('Invalid @each directive', $this);
+      } else {
+          $this->variable = trim($matches[self::VARIABLE]);
+          $this->in = $matches[self::IN];
+      }
   }
 
   /**
@@ -58,19 +59,20 @@ class SassEachNode extends SassNode {
    * @param SassContext the context in which this node is parsed
    * @return array parsed child nodes
    */
-  public function parse($context) {
-    $children = array();
+  public function parse($context)
+  {
+      $children = array();
 
-    if ($this->variable && $this->in) {
-      $context = new SassContext($context);
+      if ($this->variable && $this->in) {
+          $context = new SassContext($context);
 
-      list($in, $sep) = SassList::_parse_list($this->in, 'auto', true, $context);
-      foreach ($in as $var) {
-        $context->setVariable($this->variable, $var);
-        $children = array_merge($children, $this->parseChildren($context));
+          list($in, $sep) = SassList::_parse_list($this->in, 'auto', true, $context);
+          foreach ($in as $var) {
+              $context->setVariable($this->variable, $var);
+              $children = array_merge($children, $this->parseChildren($context));
+          }
       }
-    }
-    $context->merge();
-    return $children;
+      $context->merge();
+      return $children;
   }
 }

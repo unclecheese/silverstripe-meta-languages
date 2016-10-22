@@ -15,8 +15,9 @@
  * @package      PHamlP
  * @subpackage  Sass.script
  */
-class SassScriptOperation {
-  const MATCH = '/^(\(|\)|\+|-|\*|\/|%|<=|>=|<|>|==|!=|=|#{|}|,|and\b|or\b|xor\b|not\b)/';
+class SassScriptOperation
+{
+    const MATCH = '/^(\(|\)|\+|-|\*|\/|%|<=|>=|<|>|==|!=|=|#{|}|,|and\b|or\b|xor\b|not\b)/';
 
   /**
    * @var array map symbols to tokens.
@@ -82,16 +83,17 @@ class SassScriptOperation {
    * @param mixed string: operator symbol; array: operator token
    * @return SassScriptOperation
    */
-  public function __construct($operation) {
-    if (is_string($operation)) {
-      $operation = self::$operators[$operation];
-    }
-    $this->operator       = $operation[0];
-    if (isset($operation[1])) {
-      $this->associativity = $operation[1];
-      $this->precedence     = $operation[2];
-      $this->operandCount   = (isset($operation[3]) ? $operation[3] : 0);
-    }
+  public function __construct($operation)
+  {
+      if (is_string($operation)) {
+          $operation = self::$operators[$operation];
+      }
+      $this->operator       = $operation[0];
+      if (isset($operation[1])) {
+          $this->associativity = $operation[1];
+          $this->precedence     = $operation[2];
+          $this->operandCount   = (isset($operation[3]) ? $operation[3] : 0);
+      }
   }
 
   /**
@@ -100,13 +102,13 @@ class SassScriptOperation {
    * @return mixed value of the property
    * @throws SassScriptOperationException if the property does not exist
    */
-  public function __get($name) {
-    if (property_exists($this, $name)) {
-      return $this->$name;
-    }
-    else {
-      throw new SassScriptOperationException('Unknown property: ' . $name, SassScriptParser::$context->node);
-    }
+  public function __get($name)
+  {
+      if (property_exists($this, $name)) {
+          return $this->$name;
+      } else {
+          throw new SassScriptOperationException('Unknown property: ' . $name, SassScriptParser::$context->node);
+      }
   }
 
   /**
@@ -116,50 +118,50 @@ class SassScriptOperation {
    * @throws SassScriptOperationException if the oprand count is incorrect or
    * the operation is undefined
    */
-  public function perform($operands) {
-    if (count($operands) !== $this->operandCount) {
-      throw new SassScriptOperationException('Incorrect operand count for ' . get_class($operands[0]) . '; expected ' . $this->operandCount . ', received ' . count($operands), SassScriptParser::$context->node);
-    }
+  public function perform($operands)
+  {
+      if (count($operands) !== $this->operandCount) {
+          throw new SassScriptOperationException('Incorrect operand count for ' . get_class($operands[0]) . '; expected ' . $this->operandCount . ', received ' . count($operands), SassScriptParser::$context->node);
+      }
 
-    if (!count($operands)) {
-      return $operands;
-    }
+      if (!count($operands)) {
+          return $operands;
+      }
 
     // fix a bug of unknown origin
     foreach ($operands as $i => $op) {
-      if (!is_object($op)) {
-        $operands[] = null;
-        unset ($operands[$i]);
-      }
+        if (!is_object($op)) {
+            $operands[] = null;
+            unset($operands[$i]);
+        }
     }
-    $operands = array_values($operands);
+      $operands = array_values($operands);
 
-    if (count($operands) > 1 && is_null($operands[1])) {
-      $operation = 'op_unary_' . $this->operator;
-    }
-    else {
-      $operation = 'op_' . $this->operator;
-      if ($this->associativity == 'l') {
-        $operands = array_reverse($operands);
+      if (count($operands) > 1 && is_null($operands[1])) {
+          $operation = 'op_unary_' . $this->operator;
+      } else {
+          $operation = 'op_' . $this->operator;
+          if ($this->associativity == 'l') {
+              $operands = array_reverse($operands);
+          }
       }
-    }
 
-    if (method_exists($operands[0], $operation)) {
-        $op = clone $operands[0];
-        return $op->$operation(!empty($operands[1]) ? $operands[1] : null);
-    }
+      if (method_exists($operands[0], $operation)) {
+          $op = clone $operands[0];
+          return $op->$operation(!empty($operands[1]) ? $operands[1] : null);
+      }
 
     # avoid failures in case of null operands
     $count = count($operands);
-    foreach ($operands as $i => $op) {
-      if (is_null($op)) {
-        $count--;
+      foreach ($operands as $i => $op) {
+          if (is_null($op)) {
+              $count--;
+          }
       }
-    }
 
-    if ($count) {
-      throw new SassScriptOperationException('Undefined operation "' . $operation . '" for ' . get_class($operands[0]), SassScriptParser::$context->node);
-    }
+      if ($count) {
+          throw new SassScriptOperationException('Undefined operation "' . $operation . '" for ' . get_class($operands[0]), SassScriptParser::$context->node);
+      }
   }
 
   /**
@@ -168,22 +170,24 @@ class SassScriptOperation {
    * @param string the subject string
    * @return mixed match at the start of the string or false if no match
    */
-  public static function isa($subject) {
-    # begins with a "/x", almost always a path without quotes.
+  public static function isa($subject)
+  {
+      # begins with a "/x", almost always a path without quotes.
     if (preg_match('/^\/[^0-9\.\-\s]+/', $subject)) {
-      return FALSE;
+        return false;
     }
-    return (preg_match(self::MATCH, $subject, $matches) ? trim($matches[1]) : false);
+      return (preg_match(self::MATCH, $subject, $matches) ? trim($matches[1]) : false);
   }
 
   /**
    * Converts the operation back into it's SASS representation
    */
-  public function __toString() {
-    foreach(SassScriptOperation::$operators as $char => $operator) {
-      if ($operator[0] == trim($this->operator)) {
-        return $char;
+  public function __toString()
+  {
+      foreach (SassScriptOperation::$operators as $char => $operator) {
+          if ($operator[0] == trim($this->operator)) {
+              return $char;
+          }
       }
-    }
   }
 }

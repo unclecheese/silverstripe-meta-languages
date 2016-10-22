@@ -14,8 +14,9 @@
  * @package      PHamlP
  * @subpackage  Sass.script.literals
  */
-class SassScriptVariable {
-  /**
+class SassScriptVariable
+{
+    /**
    * Regex for matching and extracting Variables
    */
   const MATCH = '/^(?<!\\\\)(?(?!!important\b)[!\$]([\w-]+))/';
@@ -30,8 +31,9 @@ class SassScriptVariable {
    * @param string value of the Variable type
    * @return SassVariable
    */
-  public function __construct($value) {
-    $this->name = substr($value, 1);
+  public function __construct($value)
+  {
+      $this->name = substr($value, 1);
   }
 
   /**
@@ -39,8 +41,9 @@ class SassScriptVariable {
    * @param SassContext context of the variable
    * @return SassLiteral the SassScript object for this variable
    */
-  public function evaluate($context) {
-    return $context->getVariable($this->name);
+  public function evaluate($context)
+  {
+      return $context->getVariable($this->name);
   }
 
   /**
@@ -49,8 +52,9 @@ class SassScriptVariable {
    * @param string the subject string
    * @return mixed match at the start of the string or false if no match
    */
-  public static function isa($subject) {
-    // we need to do the check as preg_match returns a count of 1 if
+  public static function isa($subject)
+  {
+      // we need to do the check as preg_match returns a count of 1 if
     // subject == '!important'; the match being an empty match
     return (preg_match(self::MATCH, $subject, $matches) ? (empty($matches[0]) ? false : $matches[0]) : false);
   }

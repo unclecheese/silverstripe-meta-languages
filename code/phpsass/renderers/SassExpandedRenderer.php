@@ -19,21 +19,24 @@ require_once('SassCompactRenderer.php');
  * @package      PHamlP
  * @subpackage  Sass.renderers
  */
-class SassExpandedRenderer extends SassCompactRenderer {
-  /**
+class SassExpandedRenderer extends SassCompactRenderer
+{
+    /**
    * Renders the brace between the selectors and the properties
    * @return string the brace between the selectors and the properties
    */
-  protected function between() {
-    return " {\n" ;
+  protected function between()
+  {
+      return " {\n" ;
   }
   
   /**
    * Renders the brace at the end of the rule
    * @return string the brace between the rule and its properties
    */
-  protected function end() {
-    return "\n}\n\n";
+  protected function end()
+  {
+      return "\n}\n\n";
   }
 
   /**
@@ -41,13 +44,14 @@ class SassExpandedRenderer extends SassCompactRenderer {
    * @param SassNode the node being rendered
    * @return string the rendered commnt
    */
-  public function renderComment($node) {
-    $indent = $this->getIndent($node);
-    $lines = explode("\n", $node->value);
-    foreach ($lines as &$line) {
-      $line = trim($line);
-    }
-    return "$indent/*\n$indent * ".join("\n$indent * ", $lines)."\n$indent */".(empty($indent)?"\n":'');
+  public function renderComment($node)
+  {
+      $indent = $this->getIndent($node);
+      $lines = explode("\n", $node->value);
+      foreach ($lines as &$line) {
+          $line = trim($line);
+      }
+      return "$indent/*\n$indent * ".join("\n$indent * ", $lines)."\n$indent */".(empty($indent)?"\n":'');
   }
 
   /**
@@ -55,8 +59,9 @@ class SassExpandedRenderer extends SassCompactRenderer {
    * @param array properties to render
    * @return string the rendered properties
    */
-  public function renderProperties($node, $properties) {
-    $indent = $this->getIndent($node).self::INDENT;
-    return $indent.join("\n$indent", $properties);
+  public function renderProperties($node, $properties)
+  {
+      $indent = $this->getIndent($node).self::INDENT;
+      return $indent.join("\n$indent", $properties);
   }
 }

@@ -16,63 +16,81 @@ require_once(dirname(__FILE__).'/../SassException.php');
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassNodeException extends SassException {}
+class SassNodeException extends SassException
+{
+}
 
 /**
  * SassContextException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassContextException extends SassNodeException {}
+class SassContextException extends SassNodeException
+{
+}
 
 /**
  * SassCommentNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassCommentNodeException extends SassNodeException {}
+class SassCommentNodeException extends SassNodeException
+{
+}
 
 /**
  * SassDebugNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassDebugNodeException extends SassNodeException {}
+class SassDebugNodeException extends SassNodeException
+{
+}
 
 /**
  * SassDirectiveNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassDirectiveNodeException extends SassNodeException {}
+class SassDirectiveNodeException extends SassNodeException
+{
+}
 
 /**
  * SassEachNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassEachNodeException extends SassNodeException {}
+class SassEachNodeException extends SassNodeException
+{
+}
 
 /**
  * SassExtendNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassExtendNodeException extends SassNodeException {}
+class SassExtendNodeException extends SassNodeException
+{
+}
 
 /**
  * SassForNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassForNodeException extends SassNodeException {}
+class SassForNodeException extends SassNodeException
+{
+}
 
 /**
  * SassFunctionDefinitionNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassFunctionDefinitionNodeException extends SassNodeException {}
+class SassFunctionDefinitionNodeException extends SassNodeException
+{
+}
 
 
 /**
@@ -80,53 +98,69 @@ class SassFunctionDefinitionNodeException extends SassNodeException {}
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassIfNodeException extends SassNodeException {}
+class SassIfNodeException extends SassNodeException
+{
+}
 
 /**
  * SassImportNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassImportNodeException extends SassNodeException {}
+class SassImportNodeException extends SassNodeException
+{
+}
 
 /**
  * SassMixinDefinitionNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassMixinDefinitionNodeException extends SassNodeException {}
+class SassMixinDefinitionNodeException extends SassNodeException
+{
+}
 
 /**
  * SassMixinNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassMixinNodeException extends SassNodeException {}
+class SassMixinNodeException extends SassNodeException
+{
+}
 
 /**
  * SassPropertyNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassPropertyNodeException extends SassNodeException {}
+class SassPropertyNodeException extends SassNodeException
+{
+}
 
 /**
  * SassRuleNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassRuleNodeException extends SassNodeException {}
+class SassRuleNodeException extends SassNodeException
+{
+}
 
 /**
  * SassVariableNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassVariableNodeException extends SassNodeException {}
+class SassVariableNodeException extends SassNodeException
+{
+}
 
 /**
  * SassWhileNodeException class.
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassWhileNodeException extends SassNodeException {}
+class SassWhileNodeException extends SassNodeException
+{
+}

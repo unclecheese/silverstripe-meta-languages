@@ -17,8 +17,9 @@
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassContext {
-  /**
+class SassContext
+{
+    /**
    * @var SassContext enclosing context
    */
   public $parent;
@@ -53,21 +54,23 @@ class SassContext {
    * @param SassContext - the enclosing context
    * @return SassContext
    */
-  public function __construct($parent = null) {
-    $this->parent = $parent;
+  public function __construct($parent = null)
+  {
+      $this->parent = $parent;
   }
 
   /**
    *
    */
-  public function getContent() {
-    if ($this->content) {
-      return $this->content;
-    }
-    if (!empty($this->parent)) {
-      return $this->parent->getContent();
-    }
-    throw new SassContextException('@content requested but no content passed', $this->node);
+  public function getContent()
+  {
+      if ($this->content) {
+          return $this->content;
+      }
+      if (!empty($this->parent)) {
+          return $this->parent->getContent();
+      }
+      throw new SassContextException('@content requested but no content passed', $this->node);
   }
 
   /**
@@ -75,9 +78,10 @@ class SassContext {
    * @param string name of mixin
    * @return SassMixinDefinitionNode the mixin
    */
-  public function addMixin($name, $mixin) {
-    $this->mixins[$name] = $mixin;
-    return $this;
+  public function addMixin($name, $mixin)
+  {
+      $this->mixins[$name] = $mixin;
+      return $this;
   }
 
   /**
@@ -86,14 +90,14 @@ class SassContext {
    * @return SassMixinDefinitionNode the mixin
    * @throws SassContextException if mixin not defined in this context
    */
-  public function getMixin($name) {
-    if (isset($this->mixins[$name])) {
-      return $this->mixins[$name];
-    }
-    elseif (!empty($this->parent)) {
-      return $this->parent->getMixin($name);
-    }
-    throw new SassContextException('Undefined Mixin: ' . $name, $this->node);
+  public function getMixin($name)
+  {
+      if (isset($this->mixins[$name])) {
+          return $this->mixins[$name];
+      } elseif (!empty($this->parent)) {
+          return $this->parent->getMixin($name);
+      }
+      throw new SassContextException('Undefined Mixin: ' . $name, $this->node);
   }
 
   /**
@@ -101,12 +105,13 @@ class SassContext {
    * @param string name of function
    * @return SassFunctionDefinitionNode the function
    */
-  public function addFunction($name, $function) {
-    $this->functions[$name] = $function;
-    if (!empty($this->parent)) {
-      $this->parent->addFunction($name);
-    }
-    return $this;
+  public function addFunction($name, $function)
+  {
+      $this->functions[$name] = $function;
+      if (!empty($this->parent)) {
+          $this->parent->addFunction($name);
+      }
+      return $this;
   }
 
   /**
@@ -115,11 +120,12 @@ class SassContext {
    * @return SassFunctionDefinitionNode the mixin
    * @throws SassContextException if function not defined in this context
    */
-  public function getFunction($name) {
-    if ($fn = $this->hasFunction($name)) {
-      return $fn;
-    }
-    throw new SassContextException('Undefined Function: ' . $name, $this->node);
+  public function getFunction($name)
+  {
+      if ($fn = $this->hasFunction($name)) {
+          return $fn;
+      }
+      throw new SassContextException('Undefined Function: ' . $name, $this->node);
   }
 
   /**
@@ -127,13 +133,14 @@ class SassContext {
    * @param string name of function to check for
    * @return boolean
    */
-  public function hasFunction($name) {
-    if (isset($this->functions[$name])) {
-      return $this->functions[$name];
-    } else if (!empty($this->parent)) {
-      return $this->parent->hasFunction($name);
-    }
-    return FALSE;
+  public function hasFunction($name)
+  {
+      if (isset($this->functions[$name])) {
+          return $this->functions[$name];
+      } elseif (!empty($this->parent)) {
+          return $this->parent->hasFunction($name);
+      }
+      return false;
   }
 
   /**
@@ -142,19 +149,18 @@ class SassContext {
    * @return string the variable
    * @throws SassContextException if variable not defined in this context
    */
-  public function getVariable($name) {
-    $name = str_replace('-', '_', $name);
-    if ($this->hasVariable($name)) {
-      return $this->variables[$name];
-    }
-    elseif (!empty($this->parent)) {
-      return $this->parent->getVariable($name);
-    }
-    else {
-      // Return false instead of throwing an exception.
+  public function getVariable($name)
+  {
+      $name = str_replace('-', '_', $name);
+      if ($this->hasVariable($name)) {
+          return $this->variables[$name];
+      } elseif (!empty($this->parent)) {
+          return $this->parent->getVariable($name);
+      } else {
+          // Return false instead of throwing an exception.
       // throw new SassContextException('Undefined Variable: ' . $name, $this->node);
       return new SassBoolean('false');
-    }
+      }
   }
 
   /**
@@ -162,9 +168,10 @@ class SassContext {
    * @param string name of variable to test
    * @return boolean true if the variable exists in this context, false if not
    */
-  public function hasVariable($name) {
-    $name = str_replace('-', '_', $name);
-    return isset($this->variables[$name]);
+  public function hasVariable($name)
+  {
+      $name = str_replace('-', '_', $name);
+      return isset($this->variables[$name]);
   }
 
   /**
@@ -172,27 +179,30 @@ class SassContext {
    * @param string name of variable
    * @param sassLiteral value of variable
    */
-  public function setVariable($name, $value) {
-    $name = str_replace('-', '_', $name);
-    $this->variables[$name] = $value;
-    return $this;
+  public function setVariable($name, $value)
+  {
+      $name = str_replace('-', '_', $name);
+      $this->variables[$name] = $value;
+      return $this;
   }
 
-  public function setVariables($vars) {
-    foreach ($vars as $key => $value) {
-      if ($value !== NULL) {
-        $this->setVariable($key, $value);
-      }
+    public function setVariables($vars)
+    {
+        foreach ($vars as $key => $value) {
+            if ($value !== null) {
+                $this->setVariable($key, $value);
+            }
+        }
     }
-  }
 
   /**
    * Makes variables and mixins from this context available in the parent context.
    * Note that if there are variables or mixins with the same name in the two
    * contexts they will be set to that defined in this context.
    */
-  public function merge() {
-    $this->parent->variables = array_merge($this->parent->variables, $this->variables);
-    $this->parent->mixins = array_merge($this->parent->mixins, $this->mixins);
+  public function merge()
+  {
+      $this->parent->variables = array_merge($this->parent->variables, $this->variables);
+      $this->parent->mixins = array_merge($this->parent->mixins, $this->mixins);
   }
 }

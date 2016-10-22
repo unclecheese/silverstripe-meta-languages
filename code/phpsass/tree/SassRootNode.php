@@ -18,8 +18,9 @@ require_once(dirname(__FILE__).'/../renderers/SassRenderer.php');
  * @package      PHamlP
  * @subpackage  Sass.tree
  */
-class SassRootNode extends SassNode {
-  /**
+class SassRootNode extends SassNode
+{
+    /**
    * @var SassScriptParser SassScript parser
    */
   public $script;
@@ -41,17 +42,18 @@ class SassRootNode extends SassNode {
    * @param SassParser Sass parser
    * @return SassNode
    */
-  public function __construct($parser) {
-    parent::__construct((object) array(
+  public function __construct($parser)
+  {
+      parent::__construct((object) array(
       'source' => '',
       'level' => -1,
       'filename' => $parser->filename,
       'line' => 0,
     ));
-    $this->parser = $parser;
-    $this->script = new SassScriptParser();
-    $this->renderer = SassRenderer::getRenderer($parser->style);
-    $this->root = $this;
+      $this->parser = $parser;
+      $this->script = new SassScriptParser();
+      $this->renderer = SassRenderer::getRenderer($parser->style);
+      $this->root = $this;
   }
 
   /**
@@ -61,40 +63,45 @@ class SassRootNode extends SassNode {
    * @param SassContext the context in which this node is parsed
    * @return SassNode root node of the render tree
    */
-  public function parse($context) {
-    $node = clone $this;
-    $node->children = $this->parseChildren($context);
-    return $node;
+  public function parse($context)
+  {
+      $node = clone $this;
+      $node->children = $this->parseChildren($context);
+      return $node;
   }
 
   /**
    * Render this node.
    * @return string the rendered node
    */
-  public function render() {
-    $node = $this->parse(new SassContext());
-    $output = '';
-    foreach ($node->children as $child) {
-      $output .= $child->render();
-    } // foreach
+  public function render()
+  {
+      $node = $this->parse(new SassContext());
+      $output = '';
+      foreach ($node->children as $child) {
+          $output .= $child->render();
+      } // foreach
     return $output;
   }
 
-  public function extend($extendee, $selectors) {
-    $this->extenders[$extendee] = (isset($this->extenders[$extendee])
+    public function extend($extendee, $selectors)
+    {
+        $this->extenders[$extendee] = (isset($this->extenders[$extendee])
       ? array_merge($this->extenders[$extendee], $selectors) : $selectors);
-  }
+    }
 
-  public function getExtenders() {
-    return $this->extenders;
-  }
+    public function getExtenders()
+    {
+        return $this->extenders;
+    }
 
   /**
    * Returns a value indicating if the line represents this type of node.
    * Child classes must override this method.
    * @throws SassNodeException if not overriden
    */
-  public static function isa($line) {
-    throw new SassNodeException('Child classes must override this method');
+  public static function isa($line)
+  {
+      throw new SassNodeException('Child classes must override this method');
   }
 }
